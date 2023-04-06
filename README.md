@@ -38,8 +38,11 @@ Which (if any) progressive web app feature(s) does your app support?
 **[Add images/photos that show your mockup](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository) along with a very brief caption:**
 
 ![](./images/Page1.png)
+Here we have a standard login screen. Along with it the last tab in our nav bar. THe saved tab is where users can view/edit their saved outfits. There will be nice sorting features for users to easily find their saved outfits so they don't loose track of them.
 ![](./images/Page2.png)
+Here we have the wardrobe tab which is the default tab when the app loads. Cloths the user has logged appear here in a grid and they can click on a peice of clothing to get more information about it. They can edit/delete cloths in that page. To add cloths they click the add tab in the bottom nav and fill out the form.
 ![](./images/Page3.png)
+The final tab the user can go to is the outfit builder. Here users can customize what components are in their outfit and what order they appear in. Then they can swip left or right to pick what peice of outfit they want. Then they can save the outfit for later use.
 
 
 ## Testing Notes
