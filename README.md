@@ -4,15 +4,17 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 
 ## App Info:
 
-* Team Name: TODO
+* Team Name: Upper Five
 * App Name: TODO
 * App Link: <https://TODO.com/>
 
 ### Students
 
-* First Last, x500@umn.edu
-* ...
-
+*Anwaar Hadi, hadi0013
+*Jason Woitalla, woita006
+*William Mleziva, mlezi006
+*Aditi Patil, patil112
+*Ash Kuroki, kurok011
 
 ## Key Features
 
@@ -35,7 +37,9 @@ Which (if any) progressive web app feature(s) does your app support?
 
 **[Add images/photos that show your mockup](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository) along with a very brief caption:**
 
-![](https://media.giphy.com/media/26ufnwz3wDUli7GU0/giphy.gif)
+![](./images/Page1.png)
+![](./images/Page2.png)
+![](./images/Page3.png)
 
 
 ## Testing Notes
