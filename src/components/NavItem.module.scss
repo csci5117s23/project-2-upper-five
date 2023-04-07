@@ -1,0 +1,23 @@
+.item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: 100%;
+	padding: 0 1rem;
+	color: #000000;
+	text-decoration: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	overflow: hidden;
+
+	&:hover {
+		color: #01bf71;
+		transition: all 0.2s ease-in-out;
+	}
+
+	span {
+		font-size: 0.8rem;
+	}
+}

@@ -1,0 +1,13 @@
+// Override bulma variables here
+
+// Import Bulma
+@import "~bulma/bulma";
+
+.pageContainer {
+	position: relative;
+	min-height: 100vh;
+}
+
+.contentWrapper {
+	padding-bottom: $footer-height;
+}
