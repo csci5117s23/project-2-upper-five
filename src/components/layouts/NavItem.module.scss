@@ -20,4 +20,8 @@
 	span {
 		font-size: 0.8rem;
 	}
+
+	&[data-is-active="true"] {
+		color: #01bf71;
+	}
 }

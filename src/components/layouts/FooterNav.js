@@ -8,12 +8,26 @@ import {
 	faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import NavItem from "./NavItem";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function FooterNav() {
+	const router = useRouter();
+	const [activeTab, setActiveTab] = useState("");
+
+	useEffect(() => {
+		async function process() {
+			const path = router.pathname;
+			setActiveTab(path);
+		}
+
+		process();
+	}, [router]);
+
 	const tabs = [
 		{
 			name: "Wardrobe",
-			href: "/",
+			href: "/wardrobe",
 			icon: faHome,
 		},
 		{
@@ -34,13 +48,17 @@ function FooterNav() {
 	];
 
 	return (
-		<div className={styles.footer}>
+		<footer className={styles.footer}>
 			<div className={styles.footerContent}>
 				{tabs.map((tab) => (
-					<NavItem key={tab.name} {...tab} />
+					<NavItem
+						key={tab.name}
+						{...tab}
+						active={activeTab.includes(tab.href)}
+					/>
 				))}
 			</div>
-		</div>
+		</footer>
 	);
 }
 
