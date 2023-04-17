@@ -13,4 +13,10 @@ const tokenFetcher = ([url, token]) => {
 		});
 };
 
+const imageFetcher = (url) => {
+	return fetch(url)
+		.then((r) => r.blob())
+		.then((blob) => URL.createObjectURL(blob));
+};
+
 export { fetcher, tokenFetcher };
