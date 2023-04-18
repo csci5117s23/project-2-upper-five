@@ -14,9 +14,17 @@ const tokenFetcher = ([url, token]) => {
 };
 
 const imageFetcher = (url) => {
-	return fetch(url)
-		.then((r) => r.blob())
-		.then((blob) => URL.createObjectURL(blob));
+	return fetch(url, {
+		method: "GET",
+	})
+		.then((r) => {
+			//console.log("Response type: " + r.type);
+			return r.blob();
+		})
+		.then((blob) => {
+			//console.log("Blob: " + blob.name);
+			return URL.createObjectURL(blob);
+		});
 };
 
-export { fetcher, tokenFetcher };
+export { fetcher, tokenFetcher, imageFetcher };

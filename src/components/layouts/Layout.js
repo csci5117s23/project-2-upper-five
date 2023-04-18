@@ -21,6 +21,8 @@ function Layout({ children }) {
 		process();
 	}, [getToken]);
 
+	if (!isLoaded) return <div>Loading...</div>;
+
 	return (
 		<>
 			<div className="pageContainer">
