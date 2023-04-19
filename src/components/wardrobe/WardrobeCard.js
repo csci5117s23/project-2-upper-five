@@ -7,7 +7,7 @@ function WardrobeCard({ item }) {
 	const { data, error } = useSWRImmutable(item.downloadUrl, imageFetcher);
 
 	return (
-		<div className="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen">
+		<div className="column is-full-mobile is-half-tablet is-half-desktop is-one-third-widescreen">
 			<div className="card">
 				<div className="card-image">
 					<figure>

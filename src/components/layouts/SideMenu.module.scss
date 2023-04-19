@@ -1,0 +1,12 @@
+.menu {
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: $sidenav-width;
+	padding: 1em;
+
+	@include touch {
+		display: none;
+	}
+}
