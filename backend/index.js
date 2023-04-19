@@ -4,9 +4,13 @@ import jwtDecode from "jwt-decode";
 import { boolean, object, string, array } from "yup";
 import fetch from "node-fetch";
 
-const B2_KEY_ID = process.env.B2_KEY_ID;
-const B2_APPLICATION_KEY = process.env.B2_APPLICATION_KEY;
-const B2_BUCKET_ID = process.env.B2_BUCKET_ID;
+// const B2_KEY_ID = process.env.B2_KEY_ID;
+// const B2_APPLICATION_KEY = process.env.B2_APPLICATION_KEY;
+// const B2_BUCKET_ID = process.env.B2_BUCKET_ID;
+
+const B2_KEY_ID = "66c446d439bf";
+const B2_APPLICATION_KEY = "005efd59b013d37a0a35a1b2e27c98eea8acacaa1e";
+const B2_BUCKET_ID = "56366cf4b4f64d7483790b1f";
 
 /*
  * Kluver Code from: https://github.com/csci5117s23/Tech-Stack-2-Kluver-Demo/blob/main/backend/index.js
@@ -36,6 +40,7 @@ app.use(userAuth);
  */
 async function getAuthDetails() {
 	console.log("Getting Backblaze auth details");
+	console.log("From bucket: " + B2_BUCKET_ID);
 
 	// 1. Encoded our account ID and key, as per the Backblaze docs
 	let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString(
@@ -112,6 +117,7 @@ const itemSchema = object({
 	type: string().required(),
 	occasion: string().required(),
 	own: boolean().required(),
+	downloadUrl: string(),
 });
 
 const outfitSchema = object({
@@ -127,21 +133,35 @@ const outfitSchema = object({
 function getPostHelper(req, res) {
 	if (req.method === "POST") {
 		console.log("POST request: " + JSON.stringify(req.body));
-		req.body._id = undefined;
+		req.body._id = undefined; // don't allow the user to set the id
 		req.body.userId = req.user_token.sub;
 	} else if (req.method === "GET") {
 		req.query.userId = req.user_token.sub;
 	}
 }
 
-app.use("/items", (req, res, next) => {
+app.use("/items", async (req, res, next) => {
+	console.log(
+		"Trying to get all the items that belong to user: " + req.user_token.sub
+	);
 	getPostHelper(req, res);
+
+	if (req.method === "POST") {
+		const authDetails = await getAuthDetails();
+		const downloadUrl = authDetails.downloadUrl;
+		req.body.downloadUrl =
+			downloadUrl +
+			"/b2api/v1/b2_download_file_by_id?fileId=" +
+			req.body.imageId;
+	}
+
 	next();
 });
 
 app.use("/items:id", async (req, res, next) => {
 	const id = req.params.ID;
 	const userId = req.user_token.sub;
+	req.body._id = id; // don't allow the user to change the id
 
 	const conn = await Datastore.open();
 	try {
@@ -163,6 +183,7 @@ app.use("/items:id", async (req, res, next) => {
 app.use("/outfits:id", async (req, res, next) => {
 	const id = req.params.ID;
 	const userId = req.user_token.sub;
+	req.body._id = id; // don't allow the user to change the id
 
 	const conn = await Datastore.open();
 	try {
