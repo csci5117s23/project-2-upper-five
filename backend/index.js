@@ -1,12 +1,12 @@
 import { Datastore, app } from "codehooks-js";
 import { crudlify } from "codehooks-crudlify";
 import jwtDecode from "jwt-decode";
-import { boolean, object, string, boolean, array } from "yup";
+import { boolean, object, string, array } from "yup";
 import fetch from "node-fetch";
 
 const B2_KEY_ID = process.env.B2_KEY_ID;
 const B2_APPLICATION_KEY = process.env.B2_APPLICATION_KEY;
-const B2_BUCKET_ID = process.env.B2_BUCKET_ID
+const B2_BUCKET_ID = process.env.B2_BUCKET_ID;
 
 /*
  * Kluver Code from: https://github.com/csci5117s23/Tech-Stack-2-Kluver-Demo/blob/main/backend/index.js
