@@ -1,7 +1,7 @@
 import { Datastore, app } from "codehooks-js";
 import { crudlify } from "codehooks-crudlify";
 import jwtDecode from "jwt-decode";
-import { boolean, object, string, array } from "yup";
+import { boolean, object, string, array, date } from "yup";
 import fetch from "node-fetch";
 
 // const B2_KEY_ID = process.env.B2_KEY_ID;
@@ -118,6 +118,9 @@ const itemSchema = object({
 	occasion: string().required(),
 	own: boolean().required(),
 	downloadUrl: string(),
+	dateAdded: date()
+		.required()
+		.default(() => new Date()),
 });
 
 const outfitSchema = object({
@@ -125,6 +128,9 @@ const outfitSchema = object({
 	name: string().required().max(100),
 	items: array().of(string()).required(),
 	typeOrder: array().of(string()).required(),
+	dateAdded: date()
+		.required()
+		.default(() => new Date()),
 });
 
 /*
@@ -205,6 +211,24 @@ app.use("/outfits:id", async (req, res, next) => {
 app.use("/outfits", (req, res, next) => {
 	getPostHelper(req, res);
 	next();
+});
+
+app.use("/outfits", async (req, res, next) => {
+	const item = req.params.contains;
+	if (!item) {
+		next();
+		return;
+	}
+
+	const userId = req.user_token.sub;
+	const conn = await Datastore.open();
+
+	const options = {
+		filter: { userId: userId, items: { $in: id } },
+	};
+
+	const docs = await conn.getMany("outfits", options);
+	res.json(docs);
 });
 
 // Use Crudlify to create a REST API for any collection

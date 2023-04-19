@@ -7,7 +7,7 @@ const apiFetcher = (url) =>
 	}).then((r) => r.json());
 
 const tokenFetcher = ([url, token]) => {
-	console.log("Token Fetcher: " + url + " with: " + token);
+	// console.log("Token Fetcher: " + url + " with: " + token);
 	return fetch(url, {
 		method: "GET",
 		headers: {

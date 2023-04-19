@@ -1,6 +1,6 @@
 import PageDetails from "@/components/PageDetails";
 import withAuth from "@/components/hoc/withAuth";
-import WardrobeItem from "@/components/wardrobe/WardrobeItem";
+import WardrobeCard from "@/components/wardrobe/WardrobeCard";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -15,11 +15,12 @@ function WardrobePage() {
 		"Hats",
 	];
 	const [selectedCategory, setSelectedCategory] = useState("All");
-	/*
-	const { data, error } = useSWR(
-		`${process.env.NEXT_PUBLIC_API_URL}/wardrobe?category=${selectedCategory}`
-	);
-	*/
+	let dataUrl = `${process.env.NEXT_PUBLIC_API_URL}/items`;
+	if (selectedCategory !== "All") {
+		dataUrl = `${dataUrl}?type=${selectedCategory}`;
+	}
+
+	const { data, error } = useSWR(dataUrl);
 
 	const testItems = [
 		{
@@ -84,9 +85,10 @@ function WardrobePage() {
 			</div>
 			<section className="section">
 				<div className="columns is-multiline is-mobile">
-					{testItems.map((item) => (
-						<WardrobeItem key={item._id} item={item} />
-					))}
+					{data &&
+						data.map((item) => (
+							<WardrobeCard key={item._id} item={item} />
+						))}
 				</div>
 			</section>
 		</>
