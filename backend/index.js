@@ -21,7 +21,9 @@ const userAuth = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		next(error);
+		console.log(error);
+		res.status(400);
+		res.json(error).end();
 	}
 };
 app.use(userAuth);
@@ -125,6 +127,7 @@ const outfitSchema = object({
 function getPostHelper(req, res) {
 	if (req.method === "POST") {
 		console.log("POST request: " + JSON.stringify(req.body));
+		req.body._id = undefined;
 		req.body.userId = req.user_token.sub;
 	} else if (req.method === "GET") {
 		req.query.userId = req.user_token.sub;
@@ -144,11 +147,13 @@ app.use("/items:id", async (req, res, next) => {
 	try {
 		const doc = await conn.getOne("items", id);
 		if (doc.userId != userId) {
-			res.status(403).end();
+			res.status(403);
+			res.json({ error: "Forbidden" }).end();
 			return;
 		}
 	} catch (e) {
-		res.status(404).end();
+		res.status(404);
+		res.json(error).end();
 		return;
 	}
 
@@ -163,11 +168,13 @@ app.use("/outfits:id", async (req, res, next) => {
 	try {
 		const doc = await conn.getOne("outfits", id);
 		if (doc.userId != userId) {
-			res.status(403).end();
+			res.status(403);
+			res.json({ error: "Forbidden" }).end();
 			return;
 		}
 	} catch (e) {
-		res.status(404).end();
+		res.status(404);
+		res.json(error).end();
 		return;
 	}
 
