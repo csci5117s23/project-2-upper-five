@@ -41,6 +41,7 @@ export default function AddForm(){
             const cloud_response = await cloudUpload(resized);
             console.log("cloudresponse:",cloud_response);
 
+            //fetcher post
 
         } catch (error) {
             console.log("Error uploading image:", error);

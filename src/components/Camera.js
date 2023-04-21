@@ -8,6 +8,7 @@ export default function Camera(props){
     const handleTakePhoto = () => {
         const photo = webcamRef.current.getScreenshot();
         //convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+        //Explore alternatives
         const byteCharacters = atob(photo.split(',')[1]);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
@@ -15,7 +16,8 @@ export default function Camera(props){
         }
         const imageData = new Uint8Array(byteNumbers);
         const blob = new Blob([imageData], { type: 'image/jpeg' });
-        props.onCapture(blob);
+        const file = new File([blob], 'captured-image.jpg', { type: 'image/jpeg' });
+        props.onCapture(file);
     };
 
     return(
