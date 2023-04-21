@@ -1,13 +1,24 @@
-import { React, useRef, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import Camera from './Camera'
 import Resizer from "react-image-file-resizer";
 import { cloudUpload } from '@/modules/cloudStorage';
 import { postFetcher } from "@/modules/fetcher";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AddForm(){
     const [stage, setStage] = useState(1);
     const [cameraOpen, setcameraOpen] = useState(false);
     const [photo, setPhoto] = useState(null);
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
+	const [token, setToken] = useState(null);
+
+    useEffect(() => {
+		async function process() {
+			const myToken = await getToken({ template: "codehooks" });
+			setToken(myToken);
+		}
+		process();
+	}, [getToken]);
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -37,18 +48,23 @@ export default function AddForm(){
                     200
                 );
             });
-
+            
             const cloud_response = await cloudUpload(resized);
-            console.log("cloudresponse:",cloud_response);
 
+            data.imageId = cloud_response.fileId;
+            //console.log("data: ",data);
             //fetcher post
+            let response = await postFetcher([
+                `${process.env.NEXT_PUBLIC_API_URL}/items`,
+                token,
+                data
+            ]);
 
+            //console.log("Response: " + JSON.stringify(response));
+            
         } catch (error) {
-            console.log("Error uploading image:", error);
+            //console.log("Error uploading image:", error);
         }
-
-        
-        
     };
     
     const handleTakePhoto = (photo) => {
@@ -67,7 +83,7 @@ export default function AddForm(){
     };
 
     return(
-        <div class="container is-widescreen">
+        <div className="container is-widescreen">
             <form id="add-form" onSubmit={handleFormSubmit}>
                 {stage === 1 && (
                     <div>
@@ -116,16 +132,16 @@ export default function AddForm(){
                 )}
                 {stage === 2 && (
                     <div>
-                        <div class="field">
-                            <label class="label">Item Name</label>
-                            <div class="control">
-                                <input class="input" name="itemname" type="text" placeholder="" required></input>
+                        <div className="field">
+                            <label className="label">Item Name</label>
+                            <div className="control">
+                                <input className="input" name="name" type="text" placeholder="" required></input>
                             </div>
                         </div>
-                        <div class="field">
-                            <label class="label">Type</label>
-                            <div class="control">
-                                <div class="select">
+                        <div className="field">
+                            <label className="label">Type</label>
+                            <div className="control">
+                                <div className="select">
                                     <select name="type" required>
                                         <option>Top</option>
                                         <option>Bottom</option>
@@ -136,10 +152,10 @@ export default function AddForm(){
                                 </div>
                             </div>
                         </div>
-                        <div class="field">
-                            <label class="label">Occasion</label>
-                            <div class="control">
-                                <div class="select">
+                        <div className="field">
+                            <label className="label">Occasion</label>
+                            <div className="control">
+                                <div className="select">
                                     <select name="occasion" required>
                                         <option>Formal</option>
                                         <option>Casual</option>
@@ -149,15 +165,15 @@ export default function AddForm(){
                                 </div>
                             </div>
                         </div>
-                        <div class="field">
-                            <label class="label">Own</label>
-                            <div class="control">
-                                <label class="radio">
-                                    <input type="radio" name="own" value="yes" required></input>
+                        <div className="field">
+                            <label className="label">Own</label>
+                            <div className="control">
+                                <label className="radio">
+                                    <input type="radio" name="own" value="true" required></input>
                                     Yes
                                 </label>
                                 <label>
-                                    <input type="radio" name="own" value="no" required></input>
+                                    <input type="radio" name="own" value="false" required></input>
                                     No
                                 </label>
                             </div>
