@@ -24,8 +24,6 @@ export async function cloudUpload(file) {
 	const mimeType = file.type;
 	const fileSize = file.size;
 
-	const reader = new FileReader();
-
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 
@@ -44,7 +42,7 @@ export async function cloudUpload(file) {
 				},
 				body: file,
 			});
-			
+
 			resolve(await uploadResponse.json());
 		});
 
