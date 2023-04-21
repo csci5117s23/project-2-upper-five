@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import * as styles from "./index.module.scss";
 
+
 /*
  * This is the homepage of our clothing tracker. It doesn't have anything to do with the actual app and is simply a
  * a check page to see if the user is logged in or not. If they are logged in, they are redirected to the /wardrobe,

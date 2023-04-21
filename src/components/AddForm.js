@@ -1,22 +1,53 @@
 import { React, useRef, useState } from 'react';
 import Camera from './Camera'
+import Resizer from "react-image-file-resizer";
+import { cloudUpload } from '@/modules/cloudStorage';
+import { postFetcher } from "@/modules/fetcher";
 
 export default function AddForm(){
     const [stage, setStage] = useState(1);
     const [cameraOpen, setcameraOpen] = useState(false);
     const [photo, setPhoto] = useState(null);
-    const webcamRef = useRef(null);
 
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
+
         const formData = new FormData(event.target);
-        formData.append('photo', photo);
         const data = {};
         for (let [key, value] of formData.entries()) {
             data[key] = value;
         }
-        console.log(JSON.stringify(data));
-        // submit form data to API or backend
+        console.log("formdata: ",JSON.stringify(data));
+
+        //add resize function
+        try {
+            const resized = await new Promise((resolve) => {
+                Resizer.imageFileResizer(
+                    photo,
+                    600,
+                    600,
+                    "JPEG",
+                    100,
+                    0,
+                    (uri) => {
+                        resolve(uri);
+                    },
+                    "file",
+                    200,
+                    200
+                );
+            });
+
+            const cloud_response = await cloudUpload(resized);
+            console.log("cloudresponse:",cloud_response);
+
+
+        } catch (error) {
+            console.log("Error uploading image:", error);
+        }
+
+        
+        
     };
     
     const handleTakePhoto = (photo) => {
@@ -31,11 +62,7 @@ export default function AddForm(){
     
     const handleUploadPhoto = (event) => {
         const photo = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPhoto(reader.result);
-        };
-        reader.readAsDataURL(photo);
+        setPhoto(photo);
     };
 
     return(
@@ -47,7 +74,7 @@ export default function AddForm(){
                             <label className="label">Photo:</label>
                             {photo ? (
                                 <div>
-                                    <img src={photo} alt="User" />
+                                    <img src={URL.createObjectURL(photo)} alt="User" />
                                     <br />
                                     <button className="button is-danger" type="button" onClick={handleClearPhoto}>Clear Photo</button>
                                     <div className="field">

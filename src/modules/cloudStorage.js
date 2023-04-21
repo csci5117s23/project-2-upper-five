@@ -2,6 +2,9 @@ import Hex from "crypto-js/enc-hex";
 import SHA1 from "crypto-js/sha1";
 import WordArray from "crypto-js/lib-typedarrays";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+
 /*
  * A function that given a blob file as the argument, will upload it to cloud storage
  * and will return the ID of the file that can then be used to download the file.
