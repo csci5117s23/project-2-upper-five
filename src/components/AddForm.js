@@ -7,7 +7,6 @@ export default function AddForm(){
     const [photo, setPhoto] = useState(null);
     const webcamRef = useRef(null);
 
-    
     const handleFormSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -147,5 +146,3 @@ export default function AddForm(){
         </div>
     );
 }
-
-
