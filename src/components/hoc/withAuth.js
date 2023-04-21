@@ -31,7 +31,7 @@ const withAuth = (WrappedComponent) => {
 							fetcher: (url) => tokenFetcher([url, token]),
 						}}
 					>
-						<WrappedComponent {...props} />
+						<WrappedComponent token={token} {...props} />
 					</SWRConfig>
 				</SignedIn>
 				<SignedOut>

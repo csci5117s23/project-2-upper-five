@@ -3,7 +3,7 @@ import { imageFetcher } from "../../modules/fetcher";
 import Image from "next/image";
 import Link from "next/link";
 
-function WardrobeItem({ item }) {
+function WardrobeCard({ item }) {
 	const { data, error } = useSWRImmutable(item.downloadUrl, imageFetcher);
 
 	return (
@@ -38,4 +38,4 @@ function WardrobeItem({ item }) {
 	);
 }
 
-export default WardrobeItem;
+export default WardrobeCard;
