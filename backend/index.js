@@ -168,6 +168,7 @@ app.use("/items:id", async (req, res, next) => {
 	const id = req.params.ID;
 	const userId = req.user_token.sub;
 	req.body._id = id; // don't allow the user to change the id
+	req.userId=userId;
 
 	const conn = await Datastore.open();
 	try {

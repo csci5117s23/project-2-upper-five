@@ -8,7 +8,7 @@ import { deleteFetcher, imageFetcher, putFetcher } from "@/modules/fetcher";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
-import AddForm from "@/components/AddForm";
+import EditForm from "@/components/EditForm";
 import ConfirmModal from "@/components/ConfirmModal";
 
 function WardrobeItemPage({ token }) {
@@ -42,6 +42,9 @@ function WardrobeItemPage({ token }) {
 		setEditMode(false);
 	}
 
+	function mutateFunction(response){
+		mutate(response);
+	}
 	function handleEditButton() {
 		setEditMode(true);
 	}
@@ -124,7 +127,7 @@ function WardrobeItemPage({ token }) {
 						<WardrobeInfo item={data} />
 					) : (
 						<>
-							<AddForm />
+							<EditForm initialValues={data} mutateFunction={mutateFunction}/>
 							<div className="is-flex buttons mt-4">
 								{deleteButton}
 								<button

@@ -7,7 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import PhotoCrop from "./PhotoCrop";
 import { useRouter } from "next/router";
 
-function AddForm() {
+function AddForm({ initialValues }) {
 	const router = useRouter();
 	const [stage, setStage] = useState(1);
 	const [cameraOpen, setcameraOpen] = useState(false);
@@ -16,7 +16,7 @@ function AddForm() {
 	const { isLoaded, userId, sessionId, getToken } = useAuth();
 	const [token, setToken] = useState(null);
 	const [temp, setTemp] = useState(null);
-
+	
 	useEffect(() => {
 		async function process() {
 			const myToken = await getToken({ template: "codehooks" });
@@ -35,7 +35,6 @@ function AddForm() {
 		}
 		console.log("formdata: ", JSON.stringify(data));
 
-		//add resize function
 		try {
 			const cloud_response = await cloudUpload(croppedPhoto);
 
