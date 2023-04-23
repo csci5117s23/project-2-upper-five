@@ -1,6 +1,7 @@
 import { SignedIn } from "@clerk/nextjs";
 import FooterNav from "./FooterNav";
 import Header from "./Header";
+import SideMenu from "./SideMenu";
 
 function Layout({ children }) {
 	return (
@@ -11,6 +12,7 @@ function Layout({ children }) {
 					<main>{children}</main>
 				</div>
 				<SignedIn>
+					<SideMenu />
 					<FooterNav />
 				</SignedIn>
 			</div>

@@ -1,22 +1,14 @@
 import * as styles from "./FooterNav.module.scss";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faHome,
-	faPlus,
-	faShirt,
-	faStar,
-} from "@fortawesome/free-solid-svg-icons";
 import NavItem from "./NavItem";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import navigation from "../../data/navigation";
 
 function FooterNav() {
 	const router = useRouter();
 	const [activeTab, setActiveTab] = useState("");
 	const [scrollDirection, setScrollDirection] = useState("up");
-	//const [lastScrollTop, setLastScrollTop] = useState(0);
-	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
 		async function process() {
@@ -26,29 +18,6 @@ function FooterNav() {
 
 		process();
 	}, [router]);
-
-	const tabs = [
-		{
-			name: "Wardrobe",
-			href: "/wardrobe",
-			icon: faHome,
-		},
-		{
-			name: "Add",
-			href: "/add",
-			icon: faPlus,
-		},
-		{
-			name: "Outfits",
-			href: "/outfits",
-			icon: faShirt,
-		},
-		{
-			name: "Saved",
-			href: "/saved",
-			icon: faStar,
-		},
-	];
 
 	/*
 	 * Scroll detection code, for deciding to show or hide the footer, here is the source:
@@ -71,7 +40,6 @@ function FooterNav() {
 					setScrollDirection("up");
 				}
 			}
-			//setLastScrollTop(scrollTop <= 0 ? 0 : scrollTop);
 			lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 		};
 
@@ -88,7 +56,7 @@ function FooterNav() {
 			}
 		>
 			<div className={styles.footerContent}>
-				{tabs.map((tab) => (
+				{navigation.tabs.map((tab) => (
 					<NavItem
 						key={tab.name}
 						{...tab}
