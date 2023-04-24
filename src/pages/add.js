@@ -10,7 +10,7 @@ function AddPage() {
 				description="This is the homepage for our clothing tracker app."
 			/>
 			<div className="section pt-4">
-				<h1 className="title is-1">Add Page</h1>
+				<h1 className="title is-1">Add Items to your Closet</h1>
 				<AddForm></AddForm>
 			</div>
 		</>
