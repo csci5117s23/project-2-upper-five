@@ -1,0 +1,24 @@
+{
+	"tabs": [
+		{
+			"name": "Wardrobe",
+			"href": "/wardrobe",
+			"icon": "fa-solid fa-home"
+		},
+		{
+			"name": "Add",
+			"href": "/add",
+			"icon": "fa-solid fa-plus"
+		},
+		{
+			"name": "Outfits",
+			"href": "/outfits",
+			"icon": "fa-solid fa-shirt"
+		},
+		{
+			"name": "Saved",
+			"href": "/saved",
+			"icon": "fa-solid fa-star"
+		}
+	]
+}
