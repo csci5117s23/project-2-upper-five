@@ -8,12 +8,19 @@ export default function Customize({ typeList, setTypeList }) {
         let typeListCopy = [...typeList]
         const index = allItems.indexOf(item)
         if (index >= 0) {
-            typeListCopy.splice(index, 0, item)
+            // typeListCopy.splice(index, 0, item)
+            typeListCopy.push(item)
             typeListCopy = [...new Set(typeListCopy)]
+            typeListCopy.sort(function(a, b) {
+                return allItems.indexOf(b) < allItems.indexOf(a) ? 1 : (allItems.indexOf(b) > allItems.indexOf(a) ? -1 : 0)
+            })
             setTypeList(typeListCopy)
         } else {
             typeListCopy.push(item)
             typeListCopy = [...new Set(typeListCopy)]
+            typeListCopy.sort(function(a, b) {
+                return allItems.indexOf(b) < allItems.indexOf(a) ? 1 : (allItems.indexOf(b) > allItems.indexOf(a) ? -1 : 0)
+            })
             setTypeList(typeListCopy)
         }
     }
@@ -25,7 +32,7 @@ export default function Customize({ typeList, setTypeList }) {
     }
 
     const itemCards = allItems.map((item) => (
-        <CustomizeItem itemName={item} onChecked={insertIntoTypeList} onUnchecked={takeOutOfTypeList} />
+        <CustomizeItem key={item} itemName={item} onChecked={insertIntoTypeList} onUnchecked={takeOutOfTypeList} />
     ))
     return (
         <>

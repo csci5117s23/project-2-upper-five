@@ -6,7 +6,7 @@ import Customize from "@/components/customize/Customize";
 
 function OutfitsPage() {
 	const [displayOutfit, setDisplayOutfit] = useState(true);
-	const [typeList,setTypeList ]= useState([]);
+	const [typeList,setTypeList ]= useState(["top", "bottom", "shoes"]);
 	return (
 		<>
 			<PageDetails
