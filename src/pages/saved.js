@@ -16,10 +16,9 @@ function SavedPage() {
 
 	useEffect(() => {
 		// get all the outfits from the database for that user
-		const new_outfit = getOutfit();
-		setOutfit(new_outfit);
-	}, [outfit]); {
-	}
+		const all_outfit = getOutfit();
+		setOutfit(all_outfit);
+	}, [outfit]); 
 
 	return (
 		<>
