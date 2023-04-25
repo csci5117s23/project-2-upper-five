@@ -67,4 +67,55 @@ function anchorWrapper(anchorIndex, fn) {
 	};
 }
 
-export { polygonPositionHandler, actionHandler, anchorWrapper };
+function newPolygon(points, scale) {
+	return new fabric.Polygon(points, {
+		left: 0,
+		top: 0,
+		fill: "rgba(0,0,0,0.5)",
+		stroke: "green",
+		strokeWidth: 4,
+		scaleX: scale,
+		scaleY: scale,
+		objectCaching: false,
+		transparentCorners: false,
+		cornerColor: "blue",
+	});
+}
+
+function getCroppedPhoto(photo, polygon) {
+	const canvas = document.createElement("canvas");
+	canvas.width = polygon.width;
+	canvas.height = polygon.height;
+
+	const tempCanvas = new fabric.Canvas(canvas, {
+		width: polygon.width,
+		height: polygon.height,
+	});
+
+	const tempPhoto = new fabric.Image(photo, {
+		left: -polygon.left,
+		top: -polygon.top,
+	});
+
+	tempCanvas.add(tempPhoto).renderAll();
+	tempCanvas.clipPath = polygon;
+
+	const croppedPhotoUrl = tempCanvas.toDataURL({
+		format: "jpg",
+		quality: 1,
+	});
+
+	fetch(croppedPhotoUrl)
+		.then((res) => res.blob())
+		.then((blob) => {
+			return blob;
+		});
+}
+
+export {
+	polygonPositionHandler,
+	actionHandler,
+	anchorWrapper,
+	newPolygon,
+	getCroppedPhoto,
+};

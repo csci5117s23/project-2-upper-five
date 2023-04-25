@@ -1,0 +1,155 @@
+import { useEffect, useRef, useState } from "react";
+import { fabric } from "fabric";
+
+import * as styles from "./PhotoCrop.module.scss";
+import {
+	actionHandler,
+	anchorWrapper,
+	getCroppedPhoto,
+	newPolygon,
+	polygonPositionHandler,
+} from "@/modules/polygonEditor";
+import masks from "../data/crop-masks";
+
+function PhotoCrop({
+	photo,
+	handleClearPhoto,
+	setStage,
+	canvasSize,
+	setCroppedPhoto,
+}) {
+	const canvasRef = useRef(null);
+	const [canvas, setCanvas] = useState(null);
+	const [selectedPoints, setSelectedPoints] = useState(Object.keys(masks)[0]);
+	const [polygon, setPolygon] = useState(null);
+	const [photoUrl, setPhotoUrl] = useState(null);
+
+	useEffect(() => {
+		const container = document.querySelector(`.${styles.canvasContainer}`);
+		const containerWidth = container.clientWidth;
+
+		const canvas = new fabric.Canvas(canvasRef.current, {
+			width: containerWidth,
+			height: containerWidth,
+		});
+		setCanvas(canvas);
+
+		return () => {
+			setCanvas(null);
+			canvas.dispose();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (photo) {
+			var reader = new FileReader();
+			reader.readAsDataURL(photo);
+			reader.onload = (e) => {
+				let url = e.target.result;
+				setPhotoUrl(url);
+			};
+		}
+	}, [photo]);
+
+	useEffect(() => {
+		if (selectedPoints.length > 0 && photoUrl && canvas) {
+			const container = document.querySelector(
+				`.${styles.canvasContainer}`
+			);
+
+			const containerWidth = container.clientWidth;
+			const scale = containerWidth / canvasSize;
+
+			canvas.viewportTransform = [1, 0, 0, 1, 0, 0];
+
+			fabric.Image.fromURL(photoUrl, (img) => {
+				canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+					scaleX: canvas.width / img.width,
+					scaleY: canvas.height / img.height,
+				});
+			});
+
+			if (polygon) {
+				canvas.remove(polygon);
+			}
+
+			let myPoly = newPolygon(masks[selectedPoints], scale);
+			canvas.add(myPoly);
+			canvas.setActiveObject(myPoly);
+
+			myPoly.edit = true;
+			var lastControl = myPoly.points.length - 1;
+			myPoly.cornerStyle = "circle";
+			myPoly.cornerColor = "rgba(0,0,255,0.5)";
+			myPoly.cornerSize = 20;
+			myPoly.controls = myPoly.points.reduce((acc, point, index) => {
+				acc["p" + index] = new fabric.Control({
+					positionHandler: polygonPositionHandler,
+					actionHandler: anchorWrapper(
+						index > 0 ? index - 1 : lastControl,
+						actionHandler
+					),
+					actionName: "modifyPolygon",
+					pointIndex: index,
+				});
+				return acc;
+			}, {});
+
+			myPoly.hasBorders = false;
+			canvas.requestRenderAll();
+
+			setPolygon(myPoly);
+		}
+	}, [selectedPoints, photoUrl, canvas]);
+
+	async function handleNextButton() {
+		setStage(2);
+
+		const croppedPhoto = await getCroppedPhoto(photo, polygon);
+		setCroppedPhoto(croppedPhoto);
+	}
+
+	return (
+		<div className={styles.container}>
+			<div className="select mb-4">
+				<select
+					value={selectedPoints}
+					onChange={(e) => setSelectedPoints(e.target.value)}
+				>
+					{Object.keys(masks).map((mask) => (
+						<option key={mask} value={mask}>
+							{mask}
+						</option>
+					))}
+				</select>
+			</div>
+			<div className={styles.canvasContainer}>
+				<canvas
+					ref={canvasRef}
+					width={canvasSize}
+					height={canvasSize}
+				></canvas>
+			</div>
+			<button
+				className="button is-danger mt-4"
+				type="button"
+				onClick={handleClearPhoto}
+			>
+				Clear Photo
+			</button>
+			<div className="field">
+				<div className="control">
+					<button
+						className="button is-primary"
+						type="button"
+						onClick={handleNextButton}
+					>
+						Next
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default PhotoCrop;
