@@ -26,9 +26,19 @@ export default function ImageCarousel({type,updateItem}){
         updateItem(type,image_id);
     }
 
+    useEffect(()=>{
+        if(data && data.length === 0){ // if there is no data in the category update the attibute to be false
+            updateItem(type,false);
+        }  
+    },[data])
+
     return (
         <>
             <h2 className={`title is-2 ${styles.heading}`}>{type}</h2>
+            {   
+                /*This is used for initializing the indicies state in ListCarousel*/
+                (data && data.length > 0) && <div className={styles.hide} id={`init-${type}`} key={`key-${data[0]._id}`}>{`init-${data[0]._id}`}</div>
+            }
             <div className={styles.container} key={`outer-div-${type}`}>
                 <div className={styles.containerItem} key={`inner-div-${type}`}>
                     <Carousel id={`carousel-${type}`} showArrows={true} onChange={handleChange} key={`carousel-${type}`}>
