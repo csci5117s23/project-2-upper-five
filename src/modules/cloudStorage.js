@@ -17,7 +17,7 @@ export async function cloudUpload(file) {
 			"x-api-key": NEXT_PUBLIC_API_KEY,
 		},
 	});
-	const uploadUrl = await response.json();
+	const data = await response.json();
 
 	// 2. Create file details
 	const fileName = file.name;
@@ -31,7 +31,7 @@ export async function cloudUpload(file) {
 
 		// 3. Use the upload URL to upload the file
 		const uploadResponse = await fetch(data.uploadUrl, {
-			method: "PUT",
+			method: "POST",
 			headers: {
 				Authorization: data.uploadAuth,
 				"Content-Type": mimeType,
