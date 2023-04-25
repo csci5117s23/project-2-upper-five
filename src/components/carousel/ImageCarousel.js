@@ -1,34 +1,24 @@
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import * as styles from "./ImageCarousel.module.scss";
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import useSWR from "swr";
 
 export default function ImageCarousel({type,updateItem}){
-    const fake_data = {
-        top: [ 
-            {"url":"https://moodle.com/wp-content/uploads/2021/06/22087-11.jpg", "id":"img1-top"},
-            {"url": "https://cdn.pixabay.com/photo/2016/04/19/13/39/store-1338629_1280.jpg", "id":"img2-top"}
-        ],
-        bottom: [
-            {"url":"https://cdn5.vectorstock.com/i/1000x1000/21/49/cartoon-light-brown-jogger-pants-vector-29562149.jpg", "id":"img1"},
-            {"url": "https://freesvg.org/img/Basic-Black-Pants.png", "id":"img2"}
-        ],
-        shoes: [
-            {"url": "https://cdn.pixabay.com/photo/2013/07/12/18/20/shoes-153310_1280.png", "id":"shoes1"},
-            {"url": "https://cdn.pixabay.com/photo/2016/12/10/16/57/shoes-1897708_1280.jpg", "id":"shoes2"}
-        ],
-        glasses: [
-            {"url": "https://cdn.pixabay.com/photo/2014/04/03/11/38/sunglasses-312051_1280.png", "id":"glasses1"},
-            {"url": "https://cdn.pixabay.com/photo/2014/04/02/10/43/sunglasses-304365__480.png", "id":"glasses2"}
-        ],
-        dress: [
-            {"url": "https://cdn.pixabay.com/photo/2013/07/13/12/49/celebration-160402_1280.png", "id":"dress1"},
-            {"url": "https://cdn.pixabay.com/photo/2013/07/12/15/40/gown-150290_1280.png", "id":"dress2"}
-        ],
-        hat: [
-            {"url": "https://cdn.pixabay.com/photo/2013/07/13/10/41/hat-157581__480.png", "id":"hat1"},
-            {"url": "https://cdn.pixabay.com/photo/2014/04/02/10/38/cap-304059_1280.png", "id":"hat1"}
-        ]   
-    }
+	const { getToken } = useAuth();
+	const [token, setToken] = useState(null);
+	const { data, mutate, error } = useSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/items?type=${type}&sort=dateAdded`
+	);
+
+	useEffect(() => {
+		async function process() {
+			const myToken = await getToken({ template: "codehooks" });
+			setToken(myToken);
+		}
+		process();
+	}, [getToken]);
 
     function handleChange(index, item){
         const element_id = item.props.children[0].key;
@@ -42,13 +32,15 @@ export default function ImageCarousel({type,updateItem}){
             <div className={styles.container} key={`outer-div-${type}`}>
                 <div className={styles.containerItem} key={`inner-div-${type}`}>
                     <Carousel id={`carousel-${type}`} showArrows={true} onChange={handleChange} key={`carousel-${type}`}>
-                        {fake_data[type].map((item) => {
-                            return <div key={`carousel-item-div-${item.id}`}>
-                                    <img id={`img-${item.id}`} key={`img-${item.id}`} src={item.url}/>
-                                    <p  id={`legend-${item.id}`} key={`legend-${item.id}`} className="legend">{item.name}</p>
+                        { data && data.map((item) => {
+                            return <div key={`carousel-item-div-${item._id}`}>
+                                    <img id={`img-${item._id}`} key={`img-${item._id}`} src={item.downloadUrl}/>
+                                    <p  id={`legend-${item._id}`} key={`legend-${item._id}`} className="legend">{item.name}</p>
                                 </div>
-                        })}
+                            })
+                        }
                     </Carousel>
+                    { (data && data.length === 0) && <p className={styles.label}>No images in this category</p>}               
                 </div>
             </div>
         </>
