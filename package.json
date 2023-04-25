@@ -17,6 +17,7 @@
     "codehooks-crudlify": "^1.0.8",
     "codehooks-js": "^1.0.10",
     "crypto-js": "^4.1.1",
+    "fabric": "^5.3.0",
     "jwt-decode": "^3.1.2",
     "next": "13.3.0",
     "node-fetch": "^3.3.1",
