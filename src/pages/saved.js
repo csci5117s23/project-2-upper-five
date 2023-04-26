@@ -2,23 +2,35 @@ import PageDetails from "@/components/PageDetails";
 import withAuth from "@/components/hoc/withAuth";
 import { useEffect, useState } from "react";
 import SavedItem from "@/components/SavedItem";
-import { fetcher, tokenFetcher, imageFetcher } from "@/modules/fetcher";
+import Filter from "@/components/Filter";
+import { useAuth } from "@clerk/nextjs";
+import useSWR, { useSWRConfig } from "swr";
+import Link from "next/link";
 
 function SavedPage() {
-	const [outfit, setOutfit] = useState([]);
-
-	async function getOutfit() {
-		const outfiturl = process.env.NEXT_PUBLIC_API_URL + "/outfit";
-		const token = await getToken({ template: 'codehooks' });
-		const res = await tokenFetcher(outfiturl, token); 
-		return res; 
-	}
+	const config = useSWRConfig();
+	const { isLoaded, userId, getToken } = useAuth();
+	const [token, setToken] = useState(null);
+	// state that check if the clothes should be filtered
+	const [filter, setFilter] = useState(false);
 
 	useEffect(() => {
-		// get all the outfits from the database for that user
-		const all_outfit = getOutfit();
-		setOutfit(all_outfit);
-	}, [outfit]); 
+		async function process() {
+			const myToken = await getToken({ template: "codehooks" });
+			setToken(myToken);
+		}
+		process();
+	}, [getToken]);
+	console.log("Token: " + token)
+
+	const { data: outfit } = useSWR(
+		`${process.env.NEXT_PUBLIC_API_URL}/outfits`
+	);
+	
+	useEffect(() => {
+		console.log("Got data: " + JSON.stringify(outfit));
+	}, [outfit]);
+
 
 	return (
 		<>
@@ -30,10 +42,20 @@ function SavedPage() {
 				<h1 className="title is-1">Saved Page</h1>
 			</div>
 			<div>
-				{outfit.map((item) => {
-					<SavedItem item={item}/>
-				})}
+			<div>
+				<Filter />
 			</div>
+				<div>
+					{outfit ? (
+						outfit.map((item) => (
+							<SavedItem item={item} />
+						))
+					) : (
+						<div>No Data to Show</div>
+					)}
+				</div>
+			</div>
+			
 		</>
 	);
 }

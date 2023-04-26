@@ -4,7 +4,7 @@ function SavedItem({ item }) {
     // const { data, error } = useSWRImmutable(item.downloadUrl, imageFetcher);
    
     return (
-        <div className="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen">
+        <div className="column">
             <div className="card">
                 <div className="thumbnail">
                     {/* show thumbnail */}
@@ -18,7 +18,7 @@ function SavedItem({ item }) {
                 <div className="view-link">
                     {/* create a button that links to filter page */}
                     <button type="button">
-                        <Link href={`../../pages/filterPage`}>View</Link>
+                        <Link href={`../outfits`}>Go to Outfits</Link>
                     </button>
                 </div>
             </div>
