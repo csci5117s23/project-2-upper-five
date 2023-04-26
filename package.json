@@ -17,13 +17,16 @@
     "codehooks-crudlify": "^1.0.8",
     "codehooks-js": "^1.0.10",
     "crypto-js": "^4.1.1",
+    "fabric": "^5.3.0",
     "jwt-decode": "^3.1.2",
     "next": "13.3.0",
     "node-fetch": "^3.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-image-file-resizer": "^0.4.8",
-    "sass": "^1.62.0",
+    "react-webcam": "^7.0.1",
+    "react-responsive-carousel": "^3.2.23",
+    "sass": "^1.61.0",
     "swr": "^2.1.2",
     "yup": "^1.1.1"
   }
