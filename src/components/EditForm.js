@@ -3,47 +3,9 @@ import { putFetcher } from "@/modules/fetcher";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 
-function EditForm({ initialValues, mutateFunction }) {
+function EditForm({ initialValues, handleFormSubmit }) {
 	const router = useRouter();
 	const { isLoaded, userId, sessionId, getToken } = useAuth();
-	const [token, setToken] = useState(null);
-    const imageId = initialValues.imageId;
-
-	useEffect(() => {
-		async function process() {
-			const myToken = await getToken({ template: "codehooks" });
-			setToken(myToken);
-		}
-		process();
-	}, [getToken]);
-
-	const handleFormSubmit = async (event) => {
-		event.preventDefault();
-
-		const formData = new FormData(event.target);
-		const data = {};
-		for (let [key, value] of formData.entries()) {
-			data[key] = value;
-		}
-		data.imageId = imageId;
-
-		try {
-			console.log("data: ", data);
-			//fetcher post
-			let response = await putFetcher([
-				`${process.env.NEXT_PUBLIC_API_URL}/items/${initialValues._id}`,
-				token,
-				data,
-			]);
-
-			console.log("Edit Response: " + JSON.stringify(response));
-			
-            mutateFunction(response);
-
-		} catch (error) {
-			console.log("Error editing item data", error);
-		}
-	};
 
 	return (
 		<div className="container is-widescreen">
@@ -66,11 +28,12 @@ function EditForm({ initialValues, mutateFunction }) {
                     <div className="control">
                         <div className="select">
                             <select name="type" required defaultValue={initialValues ? initialValues.type : ''}>
-                                <option>Top</option>
-                                <option>Bottom</option>
-                                <option>Headwear</option>
-                                <option>Footwear</option>
-                                <option>Accessory</option>
+                                <option>Hats</option>
+                                <option>Accessories</option>
+                                <option>Tops</option>
+                                <option>Bottoms</option>
+                                <option>Dresses</option>
+                                <option>Shoes</option>
                             </select>
                         </div>
                     </div>
@@ -97,7 +60,7 @@ function EditForm({ initialValues, mutateFunction }) {
                                 name="own"
                                 value="true"
                                 required
-                                defaultChecked = {initialValues.own === true}
+                                defaultChecked = {initialValues?.own === true || false}
                             ></input>
                             Yes
                         </label>
@@ -107,7 +70,7 @@ function EditForm({ initialValues, mutateFunction }) {
                                 name="own"
                                 value="false"
                                 required
-                                defaultChecked = {initialValues.own === false}
+                                defaultChecked = {initialValues?.own === false || true}
                             ></input>
                             No
                         </label>

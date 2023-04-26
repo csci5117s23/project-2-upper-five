@@ -230,11 +230,12 @@ function AddForm({ initialValues }) {
 							<div className="control">
 								<div className="select">
 									<select name="type" required>
-										<option>Top</option>
-										<option>Bottom</option>
-										<option>Headwear</option>
-										<option>Footwear</option>
-										<option>Accessory</option>
+										<option>Hats</option>
+										<option>Accessories</option>
+										<option>Tops</option>
+										<option>Bottoms</option>
+										<option>Dresses</option>
+										<option>Shoes</option>
 									</select>
 								</div>
 							</div>
