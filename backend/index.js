@@ -164,7 +164,7 @@ app.use("/items", async (req, res, next) => {
 	next();
 });
 
-app.use("/items:id", async (req, res, next) => {
+app.use("/items/:id", async (req, res, next) => {
 	const id = req.params.ID;
 	const userId = req.user_token.sub;
 	req.body._id = id; // don't allow the user to change the id
@@ -177,6 +177,7 @@ app.use("/items:id", async (req, res, next) => {
 			downloadUrl +
 			"/b2api/v1/b2_download_file_by_id?fileId=" +
 			req.body.imageId;
+		console.log("Put Request: " + JSON.stringify(req.body));
 	}
 
 	const conn = await Datastore.open();
@@ -196,10 +197,11 @@ app.use("/items:id", async (req, res, next) => {
 	next();
 });
 
-app.use("/outfits:id", async (req, res, next) => {
+app.use("/outfits/:id", async (req, res, next) => {
 	const id = req.params.ID;
 	const userId = req.user_token.sub;
 	req.body._id = id; // don't allow the user to change the id
+	req.body.userId = userId;
 
 	const conn = await Datastore.open();
 	try {

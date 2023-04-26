@@ -16,7 +16,7 @@ function AddForm() {
 	const { isLoaded, userId, sessionId, getToken } = useAuth();
 	const [token, setToken] = useState(null);
 	const [temp, setTemp] = useState(null);
-
+	
 	useEffect(() => {
 		async function process() {
 			const myToken = await getToken({ template: "codehooks" });
@@ -35,7 +35,6 @@ function AddForm() {
 		}
 		console.log("formdata: ", JSON.stringify(data));
 
-		//add resize function
 		try {
 			const cloud_response = await cloudUpload(croppedPhoto);
 
@@ -231,11 +230,12 @@ function AddForm() {
 							<div className="control">
 								<div className="select">
 									<select name="type" required>
-										<option>Top</option>
-										<option>Bottom</option>
-										<option>Headwear</option>
-										<option>Footwear</option>
-										<option>Accessory</option>
+										<option>Hats</option>
+										<option>Accessories</option>
+										<option>Tops</option>
+										<option>Bottoms</option>
+										<option>Dresses</option>
+										<option>Shoes</option>
 									</select>
 								</div>
 							</div>

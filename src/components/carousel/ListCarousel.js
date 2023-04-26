@@ -3,6 +3,7 @@ import ImageCarousel from "./ImageCarousel";
 import { useAuth } from "@clerk/nextjs";
 import { postFetcher } from "@/modules/fetcher";
 import { useRouter } from "next/router";
+import * as styles from "./ListCarousel.module.scss";
 
 export default function ListCarousel({ typeList }) {
 	const { getToken } = useAuth();
@@ -12,7 +13,7 @@ export default function ListCarousel({ typeList }) {
 	typeList.forEach((type) => {
 		init_states[type] = undefined;
 	});
-	const [indicies, setIndices] = useState(init_states);
+	const [indices, setIndices] = useState(init_states);
 
 	useEffect(() => {
 		async function process() {
@@ -23,29 +24,29 @@ export default function ListCarousel({ typeList }) {
 	}, [getToken]);
 
 	function updateItem(key, id) {
-		let indiciesCopy = { ...indicies };
-		indiciesCopy[key] = id;
-		setIndices(() => indiciesCopy);
+		let indicesCopy = { ...indices };
+		indicesCopy[key] = id;
+		setIndices(() => indicesCopy);
 	}
 
 	async function saveOutfit(e) {
 		e.preventDefault();
-		// first remove outfits from type list that don't have data i.e. indicies[type] === false
-		const newTypeList = typeList.filter((type) => indicies[type] !== false);
+		// first remove outfits from type list that don't have data i.e. indices[type] === false
+		const newTypeList = typeList.filter((type) => indices[type] !== false);
 		// Lets build a POST request
 		let items = [];
 		let typeOrder = [];
 		let outfitName = document.getElementById("outfitName").value;
 		newTypeList.forEach((type) => {
-			if (indicies[type] === undefined) {
-				const elementId = document.getElementById(
+			if (indices[type] === undefined) {
+				const element_id = document.getElementById(
 					`init-${type}`
 				).innerHTML;
-				const imgId = idSplit.split("init-")[1];
-				items.push(imgId);
+				const img_id = element_id.split("-")[1];
+				items.push(img_id);
 				typeOrder.push(type);
 			} else {
-				items.push(indicies[type]);
+				items.push(indices[type]);
 				typeOrder.push(type);
 			}
 		});
@@ -93,8 +94,10 @@ export default function ListCarousel({ typeList }) {
 						></ImageCarousel>
 					);
 				})}
-				<div className="field">
-					<p className="control">
+				<div className={`field`}>
+					<p
+						className={`control ${styles.containerButton} ${styles.space}`}
+					>
 						<button type="submit" className="button is-success">
 							Finish
 						</button>

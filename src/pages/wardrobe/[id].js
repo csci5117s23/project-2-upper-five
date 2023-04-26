@@ -8,7 +8,7 @@ import { deleteFetcher, imageFetcher, putFetcher } from "@/modules/fetcher";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
-import AddForm from "@/components/AddForm";
+import EditForm from "@/components/EditForm";
 import ConfirmModal from "@/components/ConfirmModal";
 
 function WardrobeItemPage({ token }) {
@@ -31,16 +31,36 @@ function WardrobeItemPage({ token }) {
 
 	if (!data) return <div>Loading...</div>;
 
-	function handleFormSubmit(e) {
-		e.preventDefault();
-		const formData = new FormData(e.target);
-		const data = Object.fromEntries(formData);
-		const url = `${process.env.NEXT_PUBLIC_API_URL}/items/${id}`;
-		const response = putFetcher([url, token, data]);
-		console.log(response);
-		mutate(response);
+	const handleFormSubmit = async (event) => {
+		event.preventDefault();
+
+		const newformData = new FormData(event.target);
+		const newdata = {};
+		for (let [key, value] of newformData.entries()) {
+			newdata[key] = value;
+		}
+		newdata.imageId = data.imageId;
+        newdata.dateAdded = data.dateAdded;
+
+		try {
+			console.log("data!: ", newdata);
+			//fetcher post
+			let response = await putFetcher([
+				`${process.env.NEXT_PUBLIC_API_URL}/items/${data._id}`,
+				token,
+				newdata,
+			]);
+
+			console.log("Edit Response: " + JSON.stringify(response));
+			
+            mutate(response);
+
+		} catch (error) {
+			console.log("Error editing item data", error);
+		}
+
 		setEditMode(false);
-	}
+	};	
 
 	function handleEditButton() {
 		setEditMode(true);
@@ -124,7 +144,7 @@ function WardrobeItemPage({ token }) {
 						<WardrobeInfo item={data} />
 					) : (
 						<>
-							<AddForm />
+							<EditForm initialValues={data} handleFormSubmit={handleFormSubmit}/>
 							<div className="is-flex buttons mt-4">
 								{deleteButton}
 								<button

@@ -2,8 +2,9 @@ import Webcam from 'react-webcam';
 import { React, useRef, useState } from 'react';
 
 
-export default function Camera(props){
+export default function Camera({ onCapture }){
     const webcamRef = useRef(null);
+    const [useEnvironmentCamera, setUseEnvironmentCamera] = useState(false);
 
     const handleTakePhoto = () => {
         const photo = webcamRef.current.getScreenshot();
@@ -17,7 +18,13 @@ export default function Camera(props){
         const imageData = new Uint8Array(byteNumbers);
         const blob = new Blob([imageData], { type: 'image/jpeg' });
         const file = new File([blob], 'captured-image.jpg', { type: 'image/jpeg' });
-        props.onCapture(file);
+        onCapture(file);
+    };
+
+    const videoConstraints = useEnvironmentCamera ? {
+        facingMode: 'environment'
+    } : {
+        facingMode: 'user'
     };
 
     return(
@@ -26,10 +33,16 @@ export default function Camera(props){
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat='image/jpeg'
+                videoConstraints={videoConstraints}
             />
             <div className="field">
                 <div className="control">
                     <button className="button is-info" type="button" onClick={handleTakePhoto}>Take Photo</button>
+                </div>
+            </div>
+            <div className="field">
+                <div className="control">
+                    <button className="button is-link" type="button" onClick={() => setUseEnvironmentCamera(!useEnvironmentCamera)}>Switch Camera</button>
                 </div>
             </div>
         </div>
