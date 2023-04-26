@@ -41,7 +41,7 @@ function Header() {
 				</div>
 				<div>
 					<SignedIn>
-						<UserButton />
+						<UserButton showName={true}/>
 					</SignedIn>
 				</div>
 			</div>
