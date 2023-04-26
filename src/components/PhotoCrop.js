@@ -23,6 +23,7 @@ function PhotoCrop({
 	const [selectedPoints, setSelectedPoints] = useState(Object.keys(masks)[0]);
 	const [polygon, setPolygon] = useState(null);
 	const [photoUrl, setPhotoUrl] = useState(null);
+	const [imageScale, setImageScale] = useState({});
 
 	useEffect(() => {
 		const container = document.querySelector(`.${styles.canvasContainer}`);
@@ -63,6 +64,10 @@ function PhotoCrop({
 			canvas.viewportTransform = [1, 0, 0, 1, 0, 0];
 
 			fabric.Image.fromURL(photoUrl, (img) => {
+				setImageScale({
+					x: canvas.width / img.width,
+					y: canvas.height / img.height,
+				});
 				canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
 					scaleX: canvas.width / img.width,
 					scaleY: canvas.height / img.height,
@@ -103,10 +108,15 @@ function PhotoCrop({
 	}, [selectedPoints, photoUrl, canvas]);
 
 	async function handleNextButton() {
+		console.log("Going to the next stage");
 		setStage(2);
-
-		const croppedPhoto = await getCroppedPhoto(photo, polygon);
+		const croppedPhoto = await getCroppedPhoto(
+			photoUrl,
+			polygon,
+			imageScale
+		);
 		setCroppedPhoto(croppedPhoto);
+		console.log("Set cropped photo");
 	}
 
 	return (
