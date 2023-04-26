@@ -49,7 +49,7 @@ function AddForm() {
 			]);
 
 			console.log("Response: " + JSON.stringify(response));
-			router.push("/items");
+			router.push("/wardrobe");
 		} catch (error) {
 			console.log("Error uploading image:", error);
 		}
