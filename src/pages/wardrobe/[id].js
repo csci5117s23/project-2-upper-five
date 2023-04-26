@@ -105,7 +105,7 @@ function WardrobeItemPage({ token }) {
 			<div className="section">
 				<div className="container">
 					<h1 className="title is-1">{data.name}</h1>
-					<div className="box">
+					<div className="box" style={{ width: 500 }}>
 						<figure className="image is-1by1">
 							{image ? (
 								<Image
