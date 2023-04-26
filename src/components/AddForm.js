@@ -7,7 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import PhotoCrop from "./PhotoCrop";
 import { useRouter } from "next/router";
 
-function AddForm({ initialValues }) {
+function AddForm() {
 	const router = useRouter();
 	const [stage, setStage] = useState(1);
 	const [cameraOpen, setcameraOpen] = useState(false);
