@@ -17,18 +17,42 @@ function OutfitsPage() {
 				<h1 className="title is-1">Outfits Page</h1>
 				<div className="field">
 					<p className="control">
-						<button className="button is-success" onClick={ 
+						{/* <button className="button is-success" onClick={ 
 							function() {
 								setDisplayOutfit(!displayOutfit)
 								displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
 							}
 						}>
 							Customize Outfit
-						</button>
+						</button> */}
 					</p>
 				</div>
-				{ displayOutfit && <ListCarousel typeList={typeList}></ListCarousel>}
-				{ !displayOutfit && <Customize typeList={typeList} setTypeList={setTypeList}></Customize>}
+				{ displayOutfit && 
+									<>
+										<button className="button is-success" onClick={ 
+												function() {
+													setDisplayOutfit(!displayOutfit)
+													displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
+												}
+											}>
+												Customize Outfit
+										</button>
+										<ListCarousel typeList={typeList}></ListCarousel>
+									</>
+				}
+				{ !displayOutfit && 
+									<>
+										<Customize typeList={typeList} setTypeList={setTypeList} />
+										<button className="button is-success is-light" onClick={ 
+											function() {
+												setDisplayOutfit(!displayOutfit)
+												displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
+											}
+										}>
+											Show Outfit
+										</button>
+									</>
+				}
 			</div>
 		</>
 	);

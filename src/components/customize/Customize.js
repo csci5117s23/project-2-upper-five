@@ -38,9 +38,7 @@ export default function Customize({ typeList, setTypeList }) {
         <>
             {console.log(typeList)}
             <h2>Customize Your Outfit</h2>
-            <div className="cards-container">
-                {itemCards}
-            </div>
+            {itemCards}
         </>
     )
 
