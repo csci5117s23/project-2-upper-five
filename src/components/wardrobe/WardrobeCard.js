@@ -27,7 +27,7 @@ function WardrobeCard({ item }) {
 					<div className="content">
 						<Link
 							href={`/wardrobe/${item._id}`}
-							className="title is-3"
+							className="title is-3 text-primary"
 						>
 							{item.name}
 						</Link>

@@ -218,27 +218,49 @@ app.use("/outfits:id", async (req, res, next) => {
 	next();
 });
 
-app.use("/outfits", (req, res, next) => {
-	getPostHelper(req, res);
-	next();
-});
-
 app.use("/outfits", async (req, res, next) => {
-	const item = req.params.contains;
-	if (!item) {
-		next();
+	getPostHelper(req, res);
+
+	const item = req.query.contains;
+	console.log("Item query: " + item);
+	if (item) {
+		const userId = req.user_token.sub;
+		const conn = await Datastore.open();
+
+		const options = {
+			filter: { userId: userId, items: { $elemMatch: { $eq: item } } },
+		};
+
+		console.log("Options: " + JSON.stringify(options));
+		conn.getMany("outfits", options).json(res);
 		return;
 	}
 
+	next();
+});
+
+app.get("/get_items_from_outfit/:id", async (req, res) => {
+	const id = req.params.id;
 	const userId = req.user_token.sub;
 	const conn = await Datastore.open();
-
-	const options = {
-		filter: { userId: userId, items: { $in: id } },
-	};
-
-	const docs = await conn.getMany("outfits", options);
-	res.json(docs);
+	try {
+		const doc = await conn.getOne("outfits", id);
+		if (doc.userId != userId) {
+			res.status(403);
+			res.json({ error: "Forbidden" }).end();
+			return;
+		} else {
+			const options = {
+				filter: { userId: userId, _id: { $in: doc.items } },
+			};
+			conn.getMany("items", options).json(res);
+			return;
+		}
+	} catch (e) {
+		res.status(404);
+		res.json(error).end();
+		return;
+	}
 });
 
 // Use Crudlify to create a REST API for any collection
