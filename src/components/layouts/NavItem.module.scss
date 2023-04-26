@@ -13,7 +13,7 @@
 	overflow: hidden;
 
 	&:hover {
-		color: #01bf71;
+		color: $primary;
 		transition: all 0.2s ease-in-out;
 	}
 
@@ -22,6 +22,6 @@
 	}
 
 	&[data-is-active="true"] {
-		color: #01bf71;
+		color: $primary;
 	}
 }

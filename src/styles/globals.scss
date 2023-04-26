@@ -1,7 +1,14 @@
 // Override bulma variables here
+$primary: #e9fae3;
+$info: #b9d4fb;
+$success: #dee8d5;
+$warning: #da627d;
+$danger: #da627d;
+$link: #b9d4fb;
 
 // Import Bulma
 @import "~bulma/bulma";
+@import "~bulma/bulma.sass";
 
 .pageContainer {
 	position: relative;

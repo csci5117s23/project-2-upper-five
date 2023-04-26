@@ -105,14 +105,18 @@ function WardrobeItemPage({ token }) {
 			<div className="section">
 				<div className="container">
 					<h1 className="title is-1">{data.name}</h1>
-					<div className="box" style={{ width: 500 }}>
-						<figure className="image is-1by1">
+					<div className="box" style={{ maxWidth: "500px" }}>
+						<figure className="image">
 							{image ? (
 								<Image
 									src={image}
 									alt={data.name}
-									width={500}
-									height={500}
+									fill
+									sizes="100vw"
+									styles={{
+										width: "100%",
+										height: "auto",
+									}}
 								/>
 							) : null}
 						</figure>
