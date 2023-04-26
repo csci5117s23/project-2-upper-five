@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { resolve } from "styled-jsx/css";
 
 /*
  * A series of functions to handle polygon editing in fabric.js,
@@ -67,4 +68,67 @@ function anchorWrapper(anchorIndex, fn) {
 	};
 }
 
-export { polygonPositionHandler, actionHandler, anchorWrapper };
+function newPolygon(points, scale) {
+	return new fabric.Polygon(points, {
+		left: 0,
+		top: 0,
+		fill: "rgba(0,0,0,0.5)",
+		stroke: "green",
+		strokeWidth: 4,
+		scaleX: scale,
+		scaleY: scale,
+		objectCaching: false,
+		transparentCorners: false,
+		cornerColor: "blue",
+	});
+}
+
+async function getCroppedPhoto(photoUrl, polygon, imageScale) {
+	const canvas = document.createElement("canvas");
+	canvas.width = polygon.width;
+	canvas.height = polygon.height;
+
+	const tempCanvas = new fabric.Canvas(canvas, {
+		width: polygon.width * polygon.scaleX,
+		height: polygon.height * polygon.scaleY,
+		backgroundColor: "blue",
+	});
+
+	const tempPhoto = await new Promise((resolve) => {
+		fabric.Image.fromURL(photoUrl, (img) => resolve(img));
+	});
+
+	tempPhoto.set({ scaleX: imageScale.x, scaleY: imageScale.y });
+	tempPhoto.set({ left: -polygon.left, top: -polygon.top });
+	tempCanvas.add(tempPhoto).renderAll();
+
+	const tempPolygon = new fabric.Polygon(polygon.points, {
+		left: 0,
+		top: 0,
+		scaleX: polygon.scaleX,
+		scaleY: polygon.scaleY,
+		fill: "white",
+		selectable: false,
+	});
+	tempCanvas.clipPath = tempPolygon;
+
+	const croppedPhotoUrl = tempCanvas.toDataURL({
+		format: "jpg",
+		quality: 1,
+	});
+	console.log("Cropped image to data url!: " + croppedPhotoUrl);
+
+	const res = await fetch(croppedPhotoUrl);
+	const blob = await res.blob();
+	return new File([blob], "croppedPhoto.jpg", {
+		type: "image/jpeg",
+	});
+}
+
+export {
+	polygonPositionHandler,
+	actionHandler,
+	anchorWrapper,
+	newPolygon,
+	getCroppedPhoto,
+};
