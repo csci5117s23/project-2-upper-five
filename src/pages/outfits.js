@@ -6,7 +6,7 @@ import Customize from "@/components/customize/Customize";
 
 function OutfitsPage() {
 	const [displayOutfit, setDisplayOutfit] = useState(true);
-	const [typeList,setTypeList ]= useState(["top", "bottom", "shoes"]);
+	const [typeList, setTypeList] = useState(["Top", "Bottom", "Shoes"]);
 	return (
 		<>
 			<PageDetails
@@ -17,18 +17,26 @@ function OutfitsPage() {
 				<h1 className="title is-1">Outfits Page</h1>
 				<div className="field">
 					<p className="control">
-						<button className="button is-success" onClick={ 
-							function() {
-								setDisplayOutfit(!displayOutfit)
-								displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
-							}
-						}>
+						<button
+							className="button is-success"
+							onClick={function () {
+								setDisplayOutfit(!displayOutfit);
+								displayOutfit && setTypeList([]); //clear type list when clicking the button before rendering carousels
+							}}
+						>
 							Customize Outfit
 						</button>
 					</p>
 				</div>
-				{ displayOutfit && <ListCarousel typeList={typeList}></ListCarousel>}
-				{ !displayOutfit && <Customize typeList={typeList} setTypeList={setTypeList}></Customize>}
+				{displayOutfit && (
+					<ListCarousel typeList={typeList}></ListCarousel>
+				)}
+				{!displayOutfit && (
+					<Customize
+						typeList={typeList}
+						setTypeList={setTypeList}
+					></Customize>
+				)}
 			</div>
 		</>
 	);
