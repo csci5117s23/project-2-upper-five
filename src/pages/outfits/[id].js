@@ -27,7 +27,7 @@ function OutfitItemPage({ token }) {
 
 	useEffect(() => {
 		const process = async () => {
-			if (items) {
+			if (items && data) {
 				const sortedItems = items.sort((a, b) => {
 					const indexA = data.items.indexOf(a._id);
 					const indexB = data.items.indexOf(b._id);
@@ -41,7 +41,7 @@ function OutfitItemPage({ token }) {
 			}
 		};
 		process();
-	}, [items]);
+	}, [items, data]);
 
 	async function onModalConfirm() {
 		setLoading(true);

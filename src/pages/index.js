@@ -23,8 +23,8 @@ function Home() {
 	return (
 		<>
 			<PageDetails
-				title="Clothing Tracker Login"
-				description="Please log in to use our clothing tracker"
+				title="Login | Style Snips"
+				description="Please log in to use Style Snips"
 			/>
 			<section className="section">
 				<div className="columns">
@@ -33,7 +33,7 @@ function Home() {
 						<h1 className="title">
 							Welcome To
 							<br />
-							Clothing Tracker
+							Style Snips
 						</h1>
 						<div className={styles.signInContainer}>
 							{userId ? null : <SignIn></SignIn>}

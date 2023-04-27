@@ -70,8 +70,8 @@ function WardrobePage() {
 	return (
 		<>
 			<PageDetails
-				title="Clothing Tracker Wardrobe"
-				description="This is the homepage for our clothing tracker app."
+				title="Wardrobe | Style Snips"
+				description="The hub of Style Snips, here you can manage all the clothing items in your wardrobe."
 			/>
 			<div className="tabs">
 				<ul>

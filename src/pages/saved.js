@@ -13,8 +13,8 @@ function SavedPage() {
 	return (
 		<>
 			<PageDetails
-				title="Clothing Tracker Saved Outfits"
-				description="This is the homepage for our clothing tracker app."
+				title="View Saved Outfits | Style Snips"
+				description="View all your saved outfits for Style Snips, get full image views and edit outfits."
 			/>
 			<div className="section pt-4">
 				<h1 className="title is-1">Saved Outfits</h1>

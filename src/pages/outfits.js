@@ -11,8 +11,8 @@ function OutfitsPage({ token }) {
 	return (
 		<>
 			<PageDetails
-				title="Clothing Tracker Create Outfit"
-				description="This is the homepage for our clothing tracker app."
+				title="Create Outfit | Style Snips"
+				description="This is where you can create new outfits for you Style Snips closet"
 			/>
 			<div className={`section pt-4`}>
 				<div className={`${styles.container}`}>

@@ -6,8 +6,8 @@ function AddPage({ token }) {
 	return (
 		<>
 			<PageDetails
-				title="Clothing Tracker Add Clothing"
-				description="This is the homepage for our clothing tracker app."
+				title="Add Clothing | Style Snips"
+				description="This is the homepage for Style Snips."
 			/>
 			<div className="section pt-4">
 				<h1 className="title is-1">Add Items to your Closet</h1>
