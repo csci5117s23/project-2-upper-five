@@ -15,7 +15,15 @@ function Header() {
 			const pathArray = path.split("/");
 			if (pathArray.length >= 2) {
 				const rootPath = pathArray[0];
-				setRootPath("/" + rootPath);
+
+				const back = router.query.back;
+				const type = router.query.type;
+
+				if (back) {
+					setRootPath("/" + type + "/" + back);
+				} else {
+					setRootPath("/" + rootPath);
+				}
 			} else {
 				setRootPath("");
 			}

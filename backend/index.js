@@ -1,7 +1,7 @@
 import { Datastore, app } from "codehooks-js";
 import { crudlify } from "codehooks-crudlify";
 import jwtDecode from "jwt-decode";
-import { boolean, object, string, array, date } from "yup";
+import { boolean, object, string, array, date, number } from "yup";
 import fetch from "node-fetch";
 
 // const B2_KEY_ID = process.env.B2_KEY_ID;
@@ -43,20 +43,15 @@ async function getAuthDetails() {
 	console.log("From bucket: " + B2_BUCKET_ID);
 
 	// 1. Encoded our account ID and key, as per the Backblaze docs
-	let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString(
-		"base64"
-	);
+	let encoded = Buffer.from(B2_KEY_ID + ":" + B2_APPLICATION_KEY).toString("base64");
 
 	// 2. Make the fetch request to get our system level auth details
-	const response = await fetch(
-		"https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
-		{
-			method: "GET",
-			headers: {
-				Authorization: "Basic " + encoded,
-			},
-		}
-	);
+	const response = await fetch("https://api.backblazeb2.com/b2api/v2/b2_authorize_account", {
+		method: "GET",
+		headers: {
+			Authorization: "Basic " + encoded,
+		},
+	});
 	const data = await response.json();
 	console.log("Returning details");
 	console.log("Url: " + data.apiUrl);
@@ -118,6 +113,8 @@ const itemSchema = object({
 	occasion: string().required(),
 	own: boolean().required(),
 	downloadUrl: string(),
+	leftPos: number(),
+	topPos: number(),
 	dateAdded: date()
 		.required()
 		.default(() => new Date()),
@@ -147,18 +144,14 @@ function getPostHelper(req, res) {
 }
 
 app.use("/items", async (req, res, next) => {
-	console.log(
-		"Trying to get all the items that belong to user: " + req.user_token.sub
-	);
+	console.log("Trying to get all the items that belong to user: " + req.user_token.sub);
 	getPostHelper(req, res);
 
 	if (req.method === "POST") {
 		const authDetails = await getAuthDetails();
 		const downloadUrl = authDetails.downloadUrl;
 		req.body.downloadUrl =
-			downloadUrl +
-			"/b2api/v1/b2_download_file_by_id?fileId=" +
-			req.body.imageId;
+			downloadUrl + "/b2api/v1/b2_download_file_by_id?fileId=" + req.body.imageId;
 	}
 
 	next();
@@ -174,9 +167,7 @@ app.use("/items/:id", async (req, res, next) => {
 		const authDetails = await getAuthDetails();
 		const downloadUrl = authDetails.downloadUrl;
 		req.body.downloadUrl =
-			downloadUrl +
-			"/b2api/v1/b2_download_file_by_id?fileId=" +
-			req.body.imageId;
+			downloadUrl + "/b2api/v1/b2_download_file_by_id?fileId=" + req.body.imageId;
 		console.log("Put Request: " + JSON.stringify(req.body));
 	}
 
