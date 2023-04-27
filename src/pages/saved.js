@@ -8,20 +8,8 @@ import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 
 function SavedPage() {
-	const config = useSWRConfig();
-	const { isLoaded, userId, getToken } = useAuth();
-	const [token, setToken] = useState(null);
 	// state that check if the clothes should be filtered
 	const [filter, setFilter] = useState(false);
-
-	useEffect(() => {
-		async function process() {
-			const myToken = await getToken({ template: "codehooks" });
-			setToken(myToken);
-		}
-		process();
-	}, [getToken]);
-	console.log("Token: " + token);
 
 	const { data: outfit } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/outfits`);
 

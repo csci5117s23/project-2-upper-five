@@ -20,7 +20,7 @@ function SavedItem({ item }) {
 
 	useEffect(() => {
 		const process = async () => {
-			if (items) {
+			if (items && items.length > 0) {
 				const itemUrls = items.map((item) => item.downloadUrl);
 				const thumbnail = await createPreviewThumbnail(itemUrls.splice(0, 2));
 				setImage(thumbnail);
@@ -36,7 +36,7 @@ function SavedItem({ item }) {
 			</div>
 			<div className="column">
 				<div className="content">
-					<p>Outfit Name: {item.name}</p>
+					<p className="subtitle is-3">{item.name}</p>
 				</div>
 			</div>
 			<div className="column">

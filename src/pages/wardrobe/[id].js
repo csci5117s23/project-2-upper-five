@@ -73,10 +73,10 @@ function WardrobeItemPage({ token }) {
 		setEditMode(false);
 	};
 
-	function onModalConfirm() {
+	async function onModalConfirm() {
 		setLoading(true);
 		const url = `${process.env.NEXT_PUBLIC_API_URL}/items/${id}`;
-		const response = deleteFetcher([url, token]);
+		const response = await deleteFetcher([url, token]);
 		console.log(response);
 		router.push("/wardrobe?deleted=true&name=" + data.name);
 	}
