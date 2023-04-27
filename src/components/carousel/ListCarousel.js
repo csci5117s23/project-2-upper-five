@@ -3,6 +3,7 @@ import ImageCarousel from "./ImageCarousel"
 import { useAuth } from "@clerk/nextjs";
 import { postFetcher } from "@/modules/fetcher";
 import { useRouter } from "next/router";
+import * as styles from "./ListCarousel.module.scss";
 
 export default function ListCarousel({typeList}){
     const { getToken } = useAuth();
@@ -81,8 +82,8 @@ export default function ListCarousel({typeList}){
             { typeList.map((type) => {
                 return <ImageCarousel key={`imageCarousel-${type}`} type={type} updateItem={updateItem}></ImageCarousel>
             })}
-            <div className="field">
-                <p className="control">
+            <div className={`field`}>
+                <p className={`control ${styles.containerButton} ${styles.space}`}>
                     <button type="submit" className="button is-success">
                         Finish
                     </button>
