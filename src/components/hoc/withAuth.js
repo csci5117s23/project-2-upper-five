@@ -9,12 +9,19 @@ const withAuth = (WrappedComponent) => {
 		const { isLoaded, userId, sessionId, getToken } = useAuth();
 		const [token, setToken] = useState(null);
 
+		async function setAuthTokenState() {
+			const myToken = await getToken({ template: "codehooks" });
+			setToken(myToken);
+		}
+
 		useEffect(() => {
-			async function process() {
-				const myToken = await getToken({ template: "codehooks" });
-				setToken(myToken);
-			}
-			process();
+			setAuthTokenState();
+
+			const interval = setInterval(() => {
+				setAuthTokenState();
+			}, 55 * 1000);
+
+			return () => clearInterval(interval);
 		}, [getToken]);
 
 		if (!isLoaded || !token) return <Loading isPage={true} />;

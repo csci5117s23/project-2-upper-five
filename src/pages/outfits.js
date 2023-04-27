@@ -6,7 +6,7 @@ import Customize from "@/components/customize/Customize";
 
 function OutfitsPage() {
 	const [displayOutfit, setDisplayOutfit] = useState(true);
-	const [typeList,setTypeList ]= useState(["top", "bottom", "shoes"]);
+	const [typeList, setTypeList] = useState(["Tops", "Bottoms", "Shoes"]);
 	return (
 		<>
 			<PageDetails
@@ -27,32 +27,34 @@ function OutfitsPage() {
 						</button> */}
 					</p>
 				</div>
-				{ displayOutfit && 
-									<>
-										<button className="button is-success" onClick={ 
-												function() {
-													setDisplayOutfit(!displayOutfit)
-													displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
-												}
-											}>
-												Customize Outfit
-										</button>
-										<ListCarousel typeList={typeList}></ListCarousel>
-									</>
-				}
-				{ !displayOutfit && 
-									<>
-										<Customize typeList={typeList} setTypeList={setTypeList} />
-										<button className="button is-success is-light" onClick={ 
-											function() {
-												setDisplayOutfit(!displayOutfit)
-												displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
-											}
-										}>
-											Show Outfit
-										</button>
-									</>
-				}
+				{displayOutfit && (
+					<>
+						<button
+							className="button is-success"
+							onClick={function () {
+								setDisplayOutfit(!displayOutfit);
+								displayOutfit && setTypeList([]); //clear type list when clicking the button before rendering carousels
+							}}
+						>
+							Customize Outfit
+						</button>
+						<ListCarousel typeList={typeList}></ListCarousel>
+					</>
+				)}
+				{!displayOutfit && (
+					<>
+						<Customize typeList={typeList} setTypeList={setTypeList} />
+						<button
+							className="button is-success is-light"
+							onClick={function () {
+								setDisplayOutfit(!displayOutfit);
+								displayOutfit && setTypeList([]); //clear type list when clicking the button before rendering carousels
+							}}
+						>
+							Show Outfit
+						</button>
+					</>
+				)}
 			</div>
 		</>
 	);
