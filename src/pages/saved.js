@@ -20,10 +20,6 @@ function SavedPage() {
 				<h1 className="title is-1">Saved Outfits</h1>
 				<div className="container">
 					<div>
-						<Filter />
-						<br />
-					</div>
-					<div>
 						{outfit ? (
 							outfit.map((item, index) => (
 								<div key={index}>
