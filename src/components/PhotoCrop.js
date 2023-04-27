@@ -11,7 +11,14 @@ import {
 } from "@/modules/polygonEditor";
 import masks from "../data/crop-masks";
 
-function PhotoCrop({ photo, handleClearPhoto, setStage, canvasSize, setCroppedPhoto }) {
+function PhotoCrop({
+	photo,
+	handleClearPhoto,
+	setStage,
+	canvasSize,
+	setCroppedPhoto,
+	setPosition,
+}) {
 	const canvasRef = useRef(null);
 	const [canvas, setCanvas] = useState(null);
 	const [selectedPoints, setSelectedPoints] = useState(Object.keys(masks)[0]);
@@ -104,6 +111,7 @@ function PhotoCrop({ photo, handleClearPhoto, setStage, canvasSize, setCroppedPh
 		setStage(2);
 		const croppedPhoto = await getCroppedPhoto(photoUrl, polygon, imageScale);
 		setCroppedPhoto(croppedPhoto);
+		setPosition({ x: polygon.left, y: polygon.top });
 		console.log("Set cropped photo");
 	}
 

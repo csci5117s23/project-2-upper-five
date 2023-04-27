@@ -20,6 +20,7 @@ function AddForm({ token }) {
 	const [croppedPhoto, setCroppedPhoto] = useState(null);
 	const [previewImage, setPreviewImage] = useState(null);
 	const [isUploading, setIsUploading] = useState(false);
+	const [position, setPosition] = useState(null);
 
 	// Sets the preview image
 	useEffect(() => {
@@ -41,6 +42,8 @@ function AddForm({ token }) {
 		for (let [key, value] of formData.entries()) {
 			data[key] = value;
 		}
+		data["leftPos"] = position.x;
+		data["topPos"] = position.y;
 		console.log("formdata: ", JSON.stringify(data));
 
 		try {
@@ -97,6 +100,7 @@ function AddForm({ token }) {
 									setStage={setStage}
 									canvasSize={500}
 									setCroppedPhoto={setCroppedPhoto}
+									setPosition={setPosition}
 								/>
 							) : (
 								<div>

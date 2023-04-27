@@ -135,8 +135,49 @@ async function createPreviewThumbnail(photos) {
 			});
 		}
 
-		resolve(canvas.toDataURL("image/jpeg"));
+		resolve(canvas.toDataURL("image/png"));
 	});
 }
 
-export { blobToImageData, cropPhoto, createPreviewThumbnail };
+function createSingleOutfitImage(photoUrls, xPositions) {
+	return new Promise(async (resolve) => {
+		// Step 1, create images
+		const images = [];
+		let maxWidth = 0;
+		let totalHeight = 0;
+
+		for (let i = 0; i < photoUrls.length; i++) {
+			const image = new Image();
+			image.crossOrigin = "anonymous";
+			image.src = photoUrls[i];
+			await new Promise((resolve) => {
+				image.onload = () => {
+					if (image.width > maxWidth) {
+						maxWidth = image.width + xPositions[i];
+					}
+					totalHeight += image.height + 5;
+					images.push(image);
+					resolve();
+				};
+			});
+		}
+
+		// Step 2, create canvas
+		const canvas = document.createElement("canvas");
+		const ctx = canvas.getContext("2d");
+		canvas.width = maxWidth;
+		canvas.height = totalHeight;
+
+		// Step 3, draw images
+		let y = 0;
+		for (let i = 0; i < images.length; i++) {
+			ctx.drawImage(images[i], xPositions[i], y);
+			y += images[i].height + 5;
+		}
+
+		// Step 4, return image
+		resolve(canvas.toDataURL("image/png"));
+	});
+}
+
+export { blobToImageData, cropPhoto, createPreviewThumbnail, createSingleOutfitImage };

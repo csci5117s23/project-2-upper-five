@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Loading from "../Loading";
 
-function OutfitCard({ outfit }) {
+function OutfitCard({ outfit, itemId }) {
 	const [image, setImage] = useState(null);
 	const { data: items, error } = useSWR(
 		`${process.env.NEXT_PUBLIC_API_URL}/get_items_from_outfit/${outfit._id}`
@@ -30,7 +30,7 @@ function OutfitCard({ outfit }) {
 
 	return (
 		<div className="box">
-			<Link href={`/outfits/${outfit._id}`}>
+			<Link href={`/outfits/${outfit._id}?back=${itemId}&type=wardrobe`}>
 				<figure className="image is-1by1">
 					{image && <Image src={image} alt={outfit.name} width={100} height={100} />}
 				</figure>
