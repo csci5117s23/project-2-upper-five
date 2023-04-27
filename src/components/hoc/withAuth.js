@@ -19,7 +19,7 @@ const withAuth = (WrappedComponent) => {
 
 			const interval = setInterval(() => {
 				setAuthTokenState();
-			}, 55 * 1000);
+			}, 25 * 1000);
 
 			return () => clearInterval(interval);
 		}, [getToken]);

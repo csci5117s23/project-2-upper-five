@@ -40,9 +40,7 @@ function SavedItem({ item }) {
 				</div>
 			</div>
 			<div className="column">
-				<Link href={`../outfits/${item._id}`} className="button">
-					Go to Outfits
-				</Link>
+				<div className="button">Go to Outfits</div>
 			</div>
 		</Link>
 	);

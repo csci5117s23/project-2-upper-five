@@ -38,7 +38,7 @@ function OutfitsPage({ token }) {
 
 				{displayOutfit && (
 					<>
-						<ListCarousel typeList={typeList}></ListCarousel>
+						<ListCarousel typeList={typeList} token={token}></ListCarousel>
 					</>
 				)}
 				{!displayOutfit && (
