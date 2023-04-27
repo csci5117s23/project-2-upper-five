@@ -6,9 +6,12 @@ $warning: #da627d;
 $danger: #da627d;
 $link: #b95169;
 
+$input-focus-border-color: $info;
+
 // Import Bulma
 @import "~bulma/bulma";
 @import "~bulma/bulma.sass";
+@import "~bulma/sass/form/input-textarea";
 
 .pageContainer {
 	position: relative;

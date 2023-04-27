@@ -12,10 +12,8 @@ function Header() {
 	useEffect(() => {
 		async function process() {
 			const path = router.pathname.substring(1);
-			console.log(path);
 			const pathArray = path.split("/");
 			if (pathArray.length >= 2) {
-				console.log(pathArray);
 				const rootPath = pathArray[0];
 				setRootPath("/" + rootPath);
 			} else {
@@ -41,7 +39,7 @@ function Header() {
 				</div>
 				<div>
 					<SignedIn>
-						<UserButton showName={true}/>
+						<UserButton showName={true} />
 					</SignedIn>
 				</div>
 			</div>

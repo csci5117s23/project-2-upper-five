@@ -16,10 +16,78 @@ function blobToImageData(blob) {
 	});
 }
 
+async function cropPhoto(photo) {
+	console.log("Set photo size");
+	try {
+		// Crop photo to be a square
+		// source used: https://www.geeksforgeeks.org/how-to-crop-an-image-using-canvas/
+		const croppedPhoto = await new Promise((resolve) => {
+			const reader = new FileReader();
+			reader.onload = () => {
+				const image = new Image();
+				image.onload = () => {
+					const canvas = document.createElement("canvas");
+					const ctx = canvas.getContext("2d");
+					const size = Math.min(image.width, image.height);
+					canvas.width = size;
+					canvas.height = size;
+					ctx.drawImage(
+						image,
+						(image.width - size) / 2,
+						(image.height - size) / 2,
+						size,
+						size,
+						0,
+						0,
+						size,
+						size
+					);
+
+					canvas.toBlob((blob) => {
+						const file = new File([blob], photo.name, {
+							type: "image/jpeg",
+						});
+						resolve(file);
+					});
+				};
+				image.src = reader.result;
+			};
+			reader.readAsDataURL(photo);
+		});
+
+		// Resize photo to be 500x500
+		const resized = await new Promise((resolve) => {
+			Resizer.imageFileResizer(
+				croppedPhoto,
+				750,
+				750,
+				"JPEG",
+				100,
+				0,
+				(uri) => {
+					resolve(uri);
+				},
+				"file",
+				200,
+				200
+			);
+		});
+		return resized;
+	} catch (error) {
+		console.log("Error resizing image:", error);
+		return null;
+	}
+}
+
 async function createPreviewThumbnail(photos) {
+	let numImages = 1;
+	if (photos.length > 1) {
+		numImages = 2;
+	}
+
 	const files = await new Promise(async (resolve) => {
 		const files = [];
-		for (let i = 0; i < 2; i++) {
+		for (let i = 0; i < numImages; i++) {
 			const response = await fetch(photos[i]);
 			const blob = await response.blob();
 			const file = new File([blob], `photo${i}.jpg`, {
@@ -38,7 +106,7 @@ async function createPreviewThumbnail(photos) {
 		ctx.fillStyle = "white";
 		ctx.fillRect(0, 0, 750, 750);
 
-		for (let i = 0; i < 2; i++) {
+		for (let i = 0; i < numImages; i++) {
 			await new Promise((resolve) => {
 				Resizer.imageFileResizer(
 					files[i],
@@ -71,4 +139,4 @@ async function createPreviewThumbnail(photos) {
 	});
 }
 
-export { blobToImageData, createPreviewThumbnail };
+export { blobToImageData, cropPhoto, createPreviewThumbnail };
