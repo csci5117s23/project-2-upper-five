@@ -21,7 +21,13 @@ function SavedItem({ item }) {
 	useEffect(() => {
 		const process = async () => {
 			if (items && items.length > 0) {
-				const itemUrls = items.map((item) => item.downloadUrl);
+				const sortedItems = items.sort((a, b) => {
+					const indexA = item.items.indexOf(a._id);
+					const indexB = item.items.indexOf(b._id);
+					return indexA - indexB;
+				});
+
+				const itemUrls = sortedItems.map((item) => item.downloadUrl);
 				const thumbnail = await createPreviewThumbnail(itemUrls.splice(0, 2));
 				setImage(thumbnail);
 			}

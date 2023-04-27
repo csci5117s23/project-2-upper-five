@@ -33,3 +33,15 @@ $loading-25-opaque: #81384800;
 		color: $accent;
 	}
 }
+
+.control-prev {
+	&::before {
+		border-right-color: #000 !important;
+	}
+}
+
+.control-next {
+	&::before {
+		border-left-color: #000 !important;
+	}
+}

@@ -28,8 +28,14 @@ function OutfitItemPage({ token }) {
 	useEffect(() => {
 		const process = async () => {
 			if (items) {
-				let urls = items.map((item) => item.downloadUrl);
-				let xPositions = items.map((item) => (item.leftPos ? item.leftPos : 0));
+				const sortedItems = items.sort((a, b) => {
+					const indexA = data.items.indexOf(a._id);
+					const indexB = data.items.indexOf(b._id);
+					return indexA - indexB;
+				});
+
+				let urls = sortedItems.map((item) => item.downloadUrl);
+				let xPositions = sortedItems.map((item) => (item.leftPos ? item.leftPos : 0));
 				const image = await createSingleOutfitImage(urls, xPositions);
 				setFinalImage(image);
 			}

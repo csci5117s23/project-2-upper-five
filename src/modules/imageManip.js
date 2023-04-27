@@ -153,7 +153,7 @@ function createSingleOutfitImage(photoUrls, xPositions) {
 			image.src = photoUrls[i];
 			await new Promise((resolve) => {
 				image.onload = () => {
-					if (image.width > maxWidth) {
+					if (image.width + xPositions[i] > maxWidth) {
 						maxWidth = image.width + xPositions[i];
 					}
 					totalHeight += image.height + 5;
