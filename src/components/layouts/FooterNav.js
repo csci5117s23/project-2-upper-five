@@ -27,7 +27,7 @@ function FooterNav() {
 		var lastScrollTop = 0;
 		const handleScroll = () => {
 			let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-			if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 5) {
 				setScrollDirection("up");
 			} else {
 				if (scrollTop > lastScrollTop) {

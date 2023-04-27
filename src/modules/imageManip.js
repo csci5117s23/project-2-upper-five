@@ -80,9 +80,11 @@ async function cropPhoto(photo) {
 }
 
 async function createPreviewThumbnail(photos) {
+	let imageSize = 750;
 	let numImages = 1;
 	if (photos.length > 1) {
 		numImages = 2;
+		imageSize = 375;
 	}
 
 	const files = await new Promise(async (resolve) => {
@@ -90,8 +92,8 @@ async function createPreviewThumbnail(photos) {
 		for (let i = 0; i < numImages; i++) {
 			const response = await fetch(photos[i]);
 			const blob = await response.blob();
-			const file = new File([blob], `photo${i}.jpg`, {
-				type: "image/jpeg",
+			const file = new File([blob], `photo${i}.png`, {
+				type: "image/png",
 			});
 			files.push(file);
 		}
@@ -110,9 +112,9 @@ async function createPreviewThumbnail(photos) {
 			await new Promise((resolve) => {
 				Resizer.imageFileResizer(
 					files[i],
-					375,
-					375,
-					"JPEG",
+					imageSize,
+					imageSize,
+					"PNG",
 					100,
 					0,
 					(uri) => {

@@ -16,7 +16,7 @@ function OutfitsPage({ token }) {
 			/>
 			<div className={`section pt-4`}>
 				<div className={`${styles.container}`}>
-					<h1 className={`title is-1 ${styles.containerItem}`}>Outfits Page</h1>
+					<h1 className={`title is-1 ${styles.containerItem}`}>Create an Outfit</h1>
 					<div className={`field ${styles.containerItem}`}>
 						<p className="control">
 							<button
