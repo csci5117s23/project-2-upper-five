@@ -23,21 +23,19 @@ export default function ListCarousel({ typeList, token }) {
 	async function saveOutfit(e) {
 		e.preventDefault();
 		setLoading(true);
-		// first remove outfits from type list that don't have data 
-        const newTypeList = typeList.filter((type) => {
-            if(indices[type] == undefined){
-                const checkNoData = document.getElementById(`noData-${type}`); // if we are displaying "No images in this category"
-                if(checkNoData){
-                    return false;
-                }
-                else{
-                    return true;
-                }
-            }
-            else{
-                return true;
-            }
-        });
+		// first remove outfits from type list that don't have data
+		const newTypeList = typeList.filter((type) => {
+			if (indices[type] == undefined) {
+				const checkNoData = document.getElementById(`noData-${type}`); // if we are displaying "No images in this category"
+				if (checkNoData) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		});
 		// Lets build a POST request
 		let items = [];
 		let typeOrder = [];
@@ -68,8 +66,6 @@ export default function ListCarousel({ typeList, token }) {
 				token,
 				requestBody,
 			]);
-			console.log("Response: " + JSON.stringify(response));
-
 			router.push("/saved"); // redirect to saved outfit tab
 		}
 	}

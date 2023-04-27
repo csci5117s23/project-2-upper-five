@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { blobToImageData } from "@/modules/imageManip";
 import { fabric } from "fabric";
-import {
-	actionHandler,
-	anchorWrapper,
-	polygonPositionHandler,
-} from "@/modules/polygonEditor";
+import { actionHandler, anchorWrapper, polygonPositionHandler } from "@/modules/polygonEditor";
 import masks from "../data/crop-masks";
 
 function RemoveBackgroundPage() {
@@ -93,7 +89,6 @@ function RemoveBackgroundPage() {
 	function Crop(e) {
 		e.preventDefault();
 
-		console.log("Cropping image");
 		const image = new Image();
 		image.onload = () => {
 			const canvas = document.createElement("canvas");
@@ -128,7 +123,6 @@ function RemoveBackgroundPage() {
 				multiplier: 1,
 			});
 
-			console.log("Image cropped: " + dataURL);
 			setCroppedImage(dataURL);
 		};
 
@@ -142,21 +136,14 @@ function RemoveBackgroundPage() {
 				<canvas ref={canvasRef} width="500" height="500"></canvas>
 				<form onSubmit={removeBackground}>
 					<label htmlFor="image">Image</label>
-					<input
-						type="file"
-						id="image"
-						name="image"
-						accept="image/*"
-					/>
+					<input type="file" id="image" name="image" accept="image/*" />
 
 					<input type="submit" className="button" />
 				</form>
 				<button className="button" onClick={Crop}>
 					Crop
 				</button>
-				{croppedImage && (
-					<img src={croppedImage} width={500} height={500} />
-				)}
+				{croppedImage && <img src={croppedImage} width={500} height={500} />}
 			</div>
 		</div>
 	);

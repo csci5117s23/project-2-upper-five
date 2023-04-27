@@ -41,7 +41,6 @@ function OutfitItemPage({ token }) {
 		setLoading(true);
 		const url = `${process.env.NEXT_PUBLIC_API_URL}/outfits/${id}`;
 		const response = await deleteFetcher([url, token]);
-		console.log(response);
 		router.push("/saved?deleted=true&name=" + data.name);
 	}
 
@@ -78,18 +77,7 @@ function OutfitItemPage({ token }) {
 				<div className="container">
 					<p className="title is-3">Items In Outfit</p>
 					<div className="columns is-mobile is-multiline">
-						{items ? (
-							items.map((item) => (
-								<div
-									className="column is-half-mobile is-one-third-tablet"
-									key={item._id}
-								>
-									<WardrobeCard item={item} />
-								</div>
-							))
-						) : (
-							<Loading />
-						)}
+						{items ? items.map((item) => <WardrobeCard item={item} />) : <Loading />}
 					</div>
 				</div>
 			</div>

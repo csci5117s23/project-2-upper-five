@@ -8,14 +8,7 @@ import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 
 function SavedPage() {
-	// state that check if the clothes should be filtered
-	const [filter, setFilter] = useState(false);
-
 	const { data: outfit } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/outfits`);
-
-	useEffect(() => {
-		console.log("Got data: " + JSON.stringify(outfit));
-	}, [outfit]);
 
 	return (
 		<>

@@ -53,15 +53,12 @@ function WardrobeItemPage({ token }) {
 		newData.dateAdded = data.dateAdded;
 
 		try {
-			console.log("data: ", newData);
 			//fetcher post
 			let response = await putFetcher([
 				`${process.env.NEXT_PUBLIC_API_URL}/items/${data._id}`,
 				token,
 				newData,
 			]);
-
-			console.log("Edit Response: " + JSON.stringify(response));
 
 			mutate(response);
 		} catch (error) {

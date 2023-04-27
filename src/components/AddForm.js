@@ -45,13 +45,11 @@ function AddForm({ token }) {
 		}
 		data["leftPos"] = position.x;
 		data["topPos"] = position.y;
-		console.log("formdata: ", JSON.stringify(data));
 
 		try {
 			const cloud_response = await cloudUpload(croppedPhoto);
 
 			data.imageId = cloud_response.fileId;
-			console.log("data: ", data);
 			//fetcher post
 			let response = await postFetcher([
 				`${process.env.NEXT_PUBLIC_API_URL}/items`,
@@ -59,7 +57,6 @@ function AddForm({ token }) {
 				data,
 			]);
 
-			console.log("Response: " + JSON.stringify(response));
 			router.push("/wardrobe?success=true");
 		} catch (error) {
 			console.log("Error uploading image:", error);

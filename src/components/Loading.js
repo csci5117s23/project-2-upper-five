@@ -17,7 +17,9 @@ function Loading({ isPage = false, hasError = false }) {
 			<>
 				<PageDetails title="Loading..." description="Loading page" />
 				<div>Page Loading...</div>
-				<div className={styles.loading}></div>
+				<div className={styles.loadingWrapper}>
+					<div className={styles.loading}></div>
+				</div>
 			</>
 		);
 	}
@@ -27,8 +29,11 @@ function Loading({ isPage = false, hasError = false }) {
 	}
 
 	return (
-		<div>
-			Loading... <span className={styles.loading}></span>
+		<div className={styles.loadingComp}>
+			<span>Loading...</span>
+			<div className={styles.loadingWrapper}>
+				<div className={styles.loading}></div>
+			</div>
 		</div>
 	);
 }

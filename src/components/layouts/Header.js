@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import Image from "next/image";
 
 function Header() {
 	const router = useRouter();
@@ -43,7 +44,14 @@ function Header() {
 							<span>Back</span>
 						</Link>
 					)}
-					<p>Logo</p>
+					<Link href="/wardrobe">
+						<Image
+							src="/style-snips.png"
+							width={100}
+							height={75}
+							alt="Style Snips Logo"
+						/>
+					</Link>
 				</div>
 				<div>
 					<SignedIn>

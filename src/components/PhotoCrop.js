@@ -107,12 +107,12 @@ function PhotoCrop({
 	}, [selectedPoints, photoUrl, canvas]);
 
 	async function handleNextButton() {
-		console.log("Going to the next stage");
+		//console.log("Going to the next stage");
 		setStage(2);
 		const croppedPhoto = await getCroppedPhoto(photoUrl, polygon, imageScale);
 		setCroppedPhoto(croppedPhoto);
 		setPosition({ x: polygon.left, y: polygon.top });
-		console.log("Set cropped photo");
+		//console.log("Set cropped photo");
 	}
 
 	return (

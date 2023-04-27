@@ -15,7 +15,8 @@ export async function cloudUpload(file) {
 	const response = await fetch(`${NEXT_PUBLIC_API_URL}/get_upload_url`, {
 		method: "GET",
 		headers: {
-			"x-api-key": NEXT_PUBLIC_API_KEY}
+			"x-api-key": NEXT_PUBLIC_API_KEY,
+		},
 	});
 	const data = await response.json();
 

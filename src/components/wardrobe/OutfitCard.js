@@ -12,12 +12,10 @@ function OutfitCard({ outfit, itemId }) {
 	);
 
 	useEffect(() => {
-		console.log("Items: " + JSON.stringify(items));
 		const process = async () => {
 			if (items) {
 				const itemUrls = items.map((item) => item.downloadUrl);
 				const thumbnail = await createPreviewThumbnail(itemUrls.splice(0, 2));
-				console.log("Got a thumbnail");
 				setImage(thumbnail);
 			}
 		};

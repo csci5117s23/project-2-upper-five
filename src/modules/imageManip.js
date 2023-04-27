@@ -17,7 +17,6 @@ function blobToImageData(blob) {
 }
 
 async function cropPhoto(photo) {
-	console.log("Set photo size");
 	try {
 		// Crop photo to be a square
 		// source used: https://www.geeksforgeeks.org/how-to-crop-an-image-using-canvas/

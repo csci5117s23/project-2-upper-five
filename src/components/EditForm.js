@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import clothingCategories from "@/data/clothingCategories";
 
 function EditForm({ initialValues, handleFormSubmit }) {
 	const [loading, setLoading] = useState(false);
@@ -28,18 +29,15 @@ function EditForm({ initialValues, handleFormSubmit }) {
 				<div className="field">
 					<label className="label">Type</label>
 					<div className="control">
-						<div className="select">
+						<div className="select is-fullwidth">
 							<select
 								name="type"
 								required
 								defaultValue={initialValues ? initialValues.type : ""}
 							>
-								<option>Hats</option>
-								<option>Accessories</option>
-								<option>Tops</option>
-								<option>Bottoms</option>
-								<option>Dresses</option>
-								<option>Shoes</option>
+								{clothingCategories.categories.map((category) => (
+									<option key={category}>{category}</option>
+								))}
 							</select>
 						</div>
 					</div>
@@ -47,16 +45,15 @@ function EditForm({ initialValues, handleFormSubmit }) {
 				<div className="field">
 					<label className="label">Occasion</label>
 					<div className="control">
-						<div className="select">
+						<div className="select is-fullwidth">
 							<select
 								name="occasion"
 								required
 								defaultValue={initialValues ? initialValues.occasion : ""}
 							>
-								<option>Formal</option>
-								<option>Casual</option>
-								<option>Business Casual</option>
-								<option>Athletic</option>
+								{clothingCategories.occasions.map((occasion) => (
+									<option key={occasion}>{occasion}</option>
+								))}
 							</select>
 						</div>
 					</div>
@@ -64,11 +61,12 @@ function EditForm({ initialValues, handleFormSubmit }) {
 				<div className="field">
 					<label className="label">Own</label>
 					<div className="control">
-						<label className="radio">
+						<label className="radio mr-4">
 							<input
 								type="radio"
 								name="own"
 								value="true"
+								className="mr-1"
 								required
 								defaultChecked={initialValues?.own === true || false}
 							></input>
@@ -79,6 +77,7 @@ function EditForm({ initialValues, handleFormSubmit }) {
 								type="radio"
 								name="own"
 								value="false"
+								className="mr-1"
 								required
 								defaultChecked={initialValues?.own === false || true}
 							></input>

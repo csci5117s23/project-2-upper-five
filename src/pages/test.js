@@ -1,11 +1,6 @@
 import TestComponent from "@/components/TestComponent";
 import withAuth from "@/components/hoc/withAuth";
-import {
-	deleteFetcher,
-	fetcher,
-	postFetcher,
-	putFetcher,
-} from "@/modules/fetcher";
+import { deleteFetcher, fetcher, postFetcher, putFetcher } from "@/modules/fetcher";
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
@@ -20,10 +15,7 @@ function TestPage() {
 	// 	`${process.env.NEXT_PUBLIC_API_URL}/items`
 	// );
 
-	const { data: outfit, mutate} = useSWR(
-		`${process.env.NEXT_PUBLIC_API_URL}/outfits`
-	);
-
+	const { data: outfit, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/outfits`);
 
 	useEffect(() => {
 		async function process() {
@@ -32,7 +24,7 @@ function TestPage() {
 		}
 		process();
 	}, [getToken]);
-	console.log("Token: " + token)
+	console.log("Token: " + token);
 
 	const tempItemPost = {
 		name: "Test Item",
@@ -49,8 +41,7 @@ function TestPage() {
 		name: "Test Outfit",
 		items: ["Outfit1", "Outfit2"],
 		typeOrder: ["Tops", "Bottoms"],
-	}
-
+	};
 
 	async function newItemPost() {
 		let response = await postFetcher([
@@ -70,7 +61,7 @@ function TestPage() {
 		let response = await postFetcher([
 			`${process.env.NEXT_PUBLIC_API_URL}/outfits`,
 			token,
-			tempOutfitPost
+			tempOutfitPost,
 		]);
 		console.log("Response: " + JSON.stringify(response));
 
@@ -109,9 +100,7 @@ function TestPage() {
 		]);
 		console.log("Delete Response: " + JSON.stringify(response));
 
-		mutate((prevData) =>
-			prevData.filter((prevItem) => prevItem._id !== item._id)
-		);
+		mutate((prevData) => prevData.filter((prevItem) => prevItem._id !== item._id));
 	}
 
 	// useEffect(() => {
@@ -149,13 +138,7 @@ function TestPage() {
 					)}
 				</div> */}
 				<div>
-					{outfit ? (
-						outfit.map((item) => (
-							console.log(item)
-						))
-					) : (
-						<div>No Data to Show</div>
-					)}
+					{outfit ? outfit.map((item) => console.log(item)) : <div>No Data to Show</div>}
 				</div>
 			</div>
 		</div>

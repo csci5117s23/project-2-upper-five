@@ -74,14 +74,7 @@ function TestComponent({ item, onEdit, onDelete }) {
 					<p>{item.own.toString()}</p>
 					<p>{item.imageId}</p>
 					<p>{item.downloadUrl}</p>
-					{data && (
-						<Image
-							src={data}
-							alt={item.name}
-							width={100}
-							height={100}
-						/>
-					)}
+					{data && <Image src={data} alt={item.name} width={100} height={100} />}
 					<button className="button" onClick={handleEdit}>
 						Edit
 					</button>

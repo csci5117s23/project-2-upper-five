@@ -5,11 +5,7 @@ function ConfirmModal({ show, onConfirm, onCancel, children }) {
 			<div className="modal-card">
 				<header className="modal-card-head">
 					<p className="modal-card-title">Confirm</p>
-					<button
-						className="delete"
-						aria-label="close"
-						onClick={onCancel}
-					></button>
+					<button className="delete" aria-label="close" onClick={onCancel}></button>
 				</header>
 				<section className="modal-card-body">{children}</section>
 				<footer className="modal-card-foot">

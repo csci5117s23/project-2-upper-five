@@ -3,28 +3,32 @@ import FilterModal from "./FilterModal";
 const { useState } = require("react");
 
 function Filter() {
-  
-  const [isOpen, setIsOpen] = useState(false);
-  const [type, setType] = useState("");
-  function filterClothes() {
-    // filter clothes
-  }
+	const [isOpen, setIsOpen] = useState(false);
+	const [type, setType] = useState("");
+	function filterClothes() {
+		// filter clothes
+	}
 
-  return (
-      <div>
-        <div classname="filter">
-        <button id="filter-button" onClick={() => setIsOpen(!isOpen)}
-          className="filter__button">Filter</button>
-        </div>
-        {isOpen && (
-          <FilterModal 
-            show={true}
-            onConfirm={() => setIsOpen(!isOpen)}
-            onCancel={() => setIsOpen(!isOpen)}
-          />
-        )}
-    </div>
-  )
+	return (
+		<div>
+			<div classname="filter">
+				<button
+					id="filter-button"
+					onClick={() => setIsOpen(!isOpen)}
+					className="filter__button"
+				>
+					Filter
+				</button>
+			</div>
+			{isOpen && (
+				<FilterModal
+					show={true}
+					onConfirm={() => setIsOpen(!isOpen)}
+					onCancel={() => setIsOpen(!isOpen)}
+				/>
+			)}
+		</div>
+	);
 }
 
 // function Form(props) {
@@ -38,7 +42,7 @@ function Filter() {
 //           <option value="Business Casual">Business Casual</option>
 //         </select>
 //         <br/>
-//         <br/> 
+//         <br/>
 //         <label for="Type">Type </label>
 //         <select name="Type" id="Type">
 //           <option value="Top">Top</option>
@@ -46,7 +50,7 @@ function Filter() {
 //           <option value="Shoes">Shoes</option>
 //         </select>
 //         <br />
-//         <br /> 
+//         <br />
 //         <label for="name">Seach by name:</label><br/>
 //         <input type="text" id="outfit-name" name="outfit-name"/>
 //       </form>

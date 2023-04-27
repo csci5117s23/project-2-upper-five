@@ -27,9 +27,7 @@ function SideMenu() {
 					<li key={tab.name}>
 						<Link
 							href={tab.href}
-							className={
-								activeTab.includes(tab.href) ? "is-active" : ""
-							}
+							className={activeTab.includes(tab.href) ? "is-active" : ""}
 						>
 							<span className="icon mr-2">
 								<FontAwesomeIcon icon={tab.icon} />

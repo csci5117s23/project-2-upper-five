@@ -20,31 +20,20 @@ function polygonPositionHandler(dim, finalMatrix, fabricObject) {
 }
 
 function actionHandler(eventData, transform, x, y) {
-	console.log("Action handler!");
 	var polygon = transform.target;
 	var currentControl = polygon.controls[polygon.__corner];
-	var mouseLocalPosition = polygon.toLocalPoint(
-		new fabric.Point(x, y),
-		"center",
-		"center"
-	);
+	var mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), "center", "center");
 	var polygonBaseSize = polygon._getNonTransformedDimensions();
 	var size = polygon._getTransformedDimensions(0, 0);
 	var finalPointPosition = {
-		x:
-			(mouseLocalPosition.x * polygonBaseSize.x) / size.x +
-			polygon.pathOffset.x,
-		y:
-			(mouseLocalPosition.y * polygonBaseSize.y) / size.y +
-			polygon.pathOffset.y,
+		x: (mouseLocalPosition.x * polygonBaseSize.x) / size.x + polygon.pathOffset.x,
+		y: (mouseLocalPosition.y * polygonBaseSize.y) / size.y + polygon.pathOffset.y,
 	};
 	polygon.points[currentControl.pointIndex] = finalPointPosition;
 	return true;
 }
 
 function anchorWrapper(anchorIndex, fn) {
-	console.log("Anchor wrapper!");
-
 	return function (eventData, transform, x, y) {
 		var fabricObject = transform.target;
 		var absolutePoint = fabric.util.transformPoint(
@@ -58,11 +47,9 @@ function anchorWrapper(anchorIndex, fn) {
 		var newDim = fabricObject._setPositionDimensions({});
 		var polygonBaseSize = fabricObject._getNonTransformedDimensions();
 		var newX =
-			(fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) /
-			polygonBaseSize.x;
+			(fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x;
 		var newY =
-			(fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) /
-			polygonBaseSize.y;
+			(fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
 		fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
 		return actionPerformed;
 	};
@@ -116,7 +103,6 @@ async function getCroppedPhoto(photoUrl, polygon, imageScale) {
 		format: "jpg",
 		quality: 1,
 	});
-	console.log("Cropped image to data url!: " + croppedPhotoUrl);
 
 	const res = await fetch(croppedPhotoUrl);
 	const blob = await res.blob();
@@ -125,10 +111,4 @@ async function getCroppedPhoto(photoUrl, polygon, imageScale) {
 	});
 }
 
-export {
-	polygonPositionHandler,
-	actionHandler,
-	anchorWrapper,
-	newPolygon,
-	getCroppedPhoto,
-};
+export { polygonPositionHandler, actionHandler, anchorWrapper, newPolygon, getCroppedPhoto };
