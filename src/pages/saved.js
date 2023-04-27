@@ -21,16 +21,13 @@ function SavedPage() {
 		}
 		process();
 	}, [getToken]);
-	console.log("Token: " + token)
+	console.log("Token: " + token);
 
-	const { data: outfit } = useSWR(
-		`${process.env.NEXT_PUBLIC_API_URL}/outfits`
-	);
-	
+	const { data: outfit } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/outfits`);
+
 	useEffect(() => {
 		console.log("Got data: " + JSON.stringify(outfit));
 	}, [outfit]);
-
 
 	return (
 		<>
@@ -39,27 +36,26 @@ function SavedPage() {
 				description="This is the homepage for our clothing tracker app."
 			/>
 			<div className="section pt-4">
-				<h1 className="title is-1">Saved Page</h1>
-			</div>
-			<div>
-			<div>
-				<Filter />
-				<br/>
-			</div>
-				<div>
-					{outfit ? (
-						outfit.map((item, index) => 
-						<div key={index}>
-							<SavedItem item={item} />
-							<br/>
-						</div>
-						)
-					) : (
-						<div>No Data to Show</div>
-					)}
+				<h1 className="title is-1">Saved Outfits</h1>
+				<div className="container">
+					<div>
+						<Filter />
+						<br />
+					</div>
+					<div>
+						{outfit ? (
+							outfit.map((item, index) => (
+								<div key={index}>
+									<SavedItem item={item} />
+									<br />
+								</div>
+							))
+						) : (
+							<div>No Data to Show</div>
+						)}
+					</div>
 				</div>
 			</div>
-			
 		</>
 	);
 }

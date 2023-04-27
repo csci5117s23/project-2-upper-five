@@ -1,41 +1,51 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClothesHanger, faPencil, faEnvelope, faShirt, faIceSkate } from "@fortawesome/free-solid-svg-icons";
+import {
+	faClothesHanger,
+	faPencil,
+	faEnvelope,
+	faShirt,
+	faIceSkate,
+} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import Loading from "./Loading";
+import useSWR from "swr";
+import { createPreviewThumbnail } from "@/modules/imageManip";
 
 function SavedItem({ item }) {
-    // const { data, error } = useSWRImmutable(item.downloadUrl, imageFetcher);
-    // item is the outfitSchema
-    // outfitSchema = object({
-    //     userId: string().required(),
-    //     name: string().required().max(100),
-    //     items: array().of(string()).required(),
-    //     typeOrder: array().of(string()).required(),
-    //     dateAdded: date()
-    //         .required()
-    //         .default(() => new Date()),
-    //     _id: unique id
-    return (
-        <div className="card columns is-mobile">
-            <div className="column">
-                <span>
-                    <FontAwesomeIcon icon={faShirt} />
-                </span>
-                {/* show thumbnail */}
-                {/* <img src={item.thumbnail} alt={item.name} /> */}
-            </div>
-            <div className="column">
-                <div className="content">
-                    <p>Outfit Name: {item.name}</p>
-                </div>
-            </div>
-            <div className="column">
-                {/* create a button that links to filter page */}
-                <button type="button">
-                    <Link href={`../outfits/${item._id}`}>Go to Outfits</Link>
-                </button>
-            </div>
-        </div>
-    );
+	const [image, setImage] = useState(null);
+	const { data: items, error } = useSWR(
+		`${process.env.NEXT_PUBLIC_API_URL}/get_items_from_outfit/${item._id}`
+	);
+
+	useEffect(() => {
+		const process = async () => {
+			if (items) {
+				const itemUrls = items.map((item) => item.downloadUrl);
+				const thumbnail = await createPreviewThumbnail(itemUrls.splice(0, 2));
+				setImage(thumbnail);
+			}
+		};
+		process();
+	}, [items]);
+
+	return (
+		<Link href={`../outfits/${item._id}`} className="card columns is-mobile">
+			<div className="column">
+				{image ? <img src={image} width={200} height={200} /> : <Loading />}
+			</div>
+			<div className="column">
+				<div className="content">
+					<p>Outfit Name: {item.name}</p>
+				</div>
+			</div>
+			<div className="column">
+				<Link href={`../outfits/${item._id}`} className="button">
+					Go to Outfits
+				</Link>
+			</div>
+		</Link>
+	);
 }
 
-export default SavedItem; 
+export default SavedItem;
