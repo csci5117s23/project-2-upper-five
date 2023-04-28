@@ -122,11 +122,11 @@ function WardrobeItemPage({ token }) {
 					will be affected.
 				</p>
 			</ConfirmModal>
-			<div className="section">
+			<div className="section pt-0">
 				<div className="container">
 					<h1 className="title is-1">{data.name}</h1>
-					<div className="box" style={{ width: 500 }}>
-						<figure className="image is-1by1">
+					<div className="box" style={{ maxWidth: "500px" }}>
+						<div>
 							{image ? (
 								<Image
 									src={image}
@@ -135,7 +135,7 @@ function WardrobeItemPage({ token }) {
 									height={500}
 								/>
 							) : null}
-						</figure>
+						</div>
 					</div>
 					<div className="is-flex is-flex-direction-row-reverse">
 						<div className="buttons">{!editMode && editButton}</div>

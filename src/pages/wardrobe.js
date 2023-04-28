@@ -7,12 +7,12 @@ import useSWR from "swr";
 function WardrobePage() {
 	const tabs = [
 		"All",
-		"Shirts",
-		"Pants",
-		"Shoes",
-		"Accessories",
-		"Glasses",
 		"Hats",
+		"Accessories",
+		"Tops",
+		"Bottoms",
+		"Dresses",
+		"Shoes",
 	];
 	const [selectedCategory, setSelectedCategory] = useState("All");
 	let dataUrl = `${process.env.NEXT_PUBLIC_API_URL}/items`;

@@ -114,8 +114,8 @@ function AddForm() {
 			const resized = await new Promise((resolve) => {
 				Resizer.imageFileResizer(
 					croppedPhoto,
-					500,
-					500,
+					750,
+					750,
 					"JPEG",
 					100,
 					0,
@@ -196,7 +196,7 @@ function AddForm() {
 												</label>
 											</div>
 											<button
-												className="button is-primary"
+												className="button is-warning"
 												type="button"
 												onClick={() =>
 													setcameraOpen(true)

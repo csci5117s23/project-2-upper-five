@@ -14,9 +14,9 @@ function WardrobeUsedIn({ id }) {
 
 	return (
 		<section>
-			<div className="columns is-multiline">
+			<div className="columns is-mobile is-multiline">
 				{data.map((outfit) => (
-					<div className="column is-one-quarter">
+					<div className="column is-half-mobile is-one-third-tablet">
 						<OutfitCard outfit={outfit} />
 					</div>
 				))}
