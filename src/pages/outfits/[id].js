@@ -83,7 +83,11 @@ function OutfitItemPage({ token }) {
 				<div className="container">
 					<p className="title is-3">Items In Outfit</p>
 					<div className="columns is-mobile is-multiline">
-						{items ? items.map((item) => <WardrobeCard item={item} />) : <Loading />}
+						{items && items.length > 0 ? (
+							items.map((item) => <WardrobeCard item={item} />)
+						) : (
+							<Loading />
+						)}
 					</div>
 				</div>
 			</div>
