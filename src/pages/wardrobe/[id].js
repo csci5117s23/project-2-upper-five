@@ -6,7 +6,6 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { deleteFetcher, imageFetcher, putFetcher } from "@/modules/fetcher";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import EditForm from "@/components/EditForm";
 import ConfirmModal from "@/components/ConfirmModal";

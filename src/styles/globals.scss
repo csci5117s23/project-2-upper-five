@@ -3,6 +3,10 @@
 
 // Override bulma variables here
 $primary: #e9fae3;
+$primary-invert: findColorInvert($primary);
+$primary-light: #e9fae3;
+$primary-dark: #e9fae3;
+
 $info: #8cb9f8;
 $success: #dee8d5;
 $warning: #da627d;
@@ -16,8 +20,13 @@ $title-family: "Lilita One", serif;
 // Import Bulma
 @import "~bulma/bulma";
 @import "~bulma/bulma.sass";
-@import "~bulma/sass/form/input-textarea";
+@import "~bulma/sass/utilities/initial-variables";
+//@import "~bulma/sass/utilities/derived-variables";
+
 @import "~bulma/sass/elements/title";
+@import "~bulma/sass/elements/button";
+
+@import "~bulma/sass/form/input-textarea";
 
 .pageContainer {
 	position: relative;
