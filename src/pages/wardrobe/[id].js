@@ -10,6 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import EditForm from "@/components/EditForm";
 import ConfirmModal from "@/components/ConfirmModal";
+import Notification from "@/components/Notification";
+import PageDetails from "@/components/PageDetails";
+import IconButton from "@/components/IconButton";
+import Loading from "@/components/Loading";
 
 function WardrobeItemPage({ token }) {
 	const router = useRouter();
@@ -17,140 +21,130 @@ function WardrobeItemPage({ token }) {
 	const [editMode, setEditMode] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [successMessage, setSuccessMessage] = useState(false);
 
-	const { data, mutate, error } = useSWR(
-		`${process.env.NEXT_PUBLIC_API_URL}/items/${id}`
-	);
+	const { data, mutate, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/items/${id}`);
 
 	const { data: image, error: imageError } = useSWRImmutable(
 		data ? data.downloadUrl : null,
 		imageFetcher
 	);
 
-	if (error) return <div>Failed to load</div>;
+	useEffect(() => {
+		async function process() {
+			if (successMessage) {
+				window.scrollTo(0, 0);
+				await new Promise((resolve) => setTimeout(resolve, 9000));
+				setSuccessMessage(false);
+			}
+		}
 
-	if (!data) return <div>Loading...</div>;
+		process();
+	}, [successMessage]);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 
-		const newformData = new FormData(event.target);
-		const newdata = {};
-		for (let [key, value] of newformData.entries()) {
-			newdata[key] = value;
+		const newFormData = new FormData(event.target);
+		const newData = {};
+		for (let [key, value] of newFormData.entries()) {
+			newData[key] = value;
 		}
-		newdata.imageId = data.imageId;
-        newdata.dateAdded = data.dateAdded;
+		newData.imageId = data.imageId;
+		newData.dateAdded = data.dateAdded;
 
 		try {
-			console.log("data!: ", newdata);
+			console.log("data: ", newData);
 			//fetcher post
 			let response = await putFetcher([
 				`${process.env.NEXT_PUBLIC_API_URL}/items/${data._id}`,
 				token,
-				newdata,
+				newData,
 			]);
 
 			console.log("Edit Response: " + JSON.stringify(response));
-			
-            mutate(response);
 
+			mutate(response);
 		} catch (error) {
 			console.log("Error editing item data", error);
 		}
 
+		setSuccessMessage(true);
 		setEditMode(false);
-	};	
-
-	function handleEditButton() {
-		setEditMode(true);
-	}
-
-	function handleSaveButton() {}
-
-	function handleCancelButton() {
-		setEditMode(false);
-	}
-
-	function handleDeleteButton() {
-		setDeleteModal(true);
-	}
+	};
 
 	function onModalConfirm() {
 		setLoading(true);
 		const url = `${process.env.NEXT_PUBLIC_API_URL}/items/${id}`;
 		const response = deleteFetcher([url, token]);
 		console.log(response);
-		router.push("/wardrobe");
+		router.push("/wardrobe?deleted=true&name=" + data.name);
 	}
 
-	function onModalCancel() {
-		setDeleteModal(false);
-	}
+	if (error) return <div>Failed to load</div>;
 
-	const editButton = (
-		<button className="button is-primary" onClick={handleEditButton}>
-			<span>Edit</span>
-			<span className="icon">
-				<FontAwesomeIcon icon={faPencil} />
-			</span>
-		</button>
-	);
-
-	const deleteButton = (
-		<button className="button is-danger" onClick={handleDeleteButton}>
-			<span>Delete</span>
-			<span className="icon">
-				<FontAwesomeIcon icon={faTrash} />
-			</span>
-		</button>
-	);
-
-	if (loading) return <div>Loading...</div>;
+	if (loading || !data) return <Loading isPage={true} />;
 
 	return (
 		<>
+			<PageDetails
+				title={`${data.name} | Wardrobe`}
+				description="This is an individual item in your wardrobe."
+			/>
 			<ConfirmModal
 				onConfirm={onModalConfirm}
-				onCancel={onModalCancel}
+				onCancel={() => setDeleteModal(false)}
 				show={deleteModal}
 			>
 				<p>Are you sure you want to delete this item?</p>
 				<p>
-					<span className="has-text-weight-bold">Warning:</span> This
-					action cannot be undone, and all outfits that use this item
-					will be affected.
+					<span className="has-text-weight-bold">Warning:</span> This action cannot be
+					undone, and all outfits that use this item will be affected.
 				</p>
 			</ConfirmModal>
 			<div className="section pt-0">
+				<Notification
+					message="Item successfully updated!"
+					type="is-success"
+					show={successMessage}
+					setShow={setSuccessMessage}
+				/>
 				<div className="container">
 					<h1 className="title is-1">{data.name}</h1>
 					<div className="box" style={{ maxWidth: "500px" }}>
 						<div>
 							{image ? (
-								<Image
-									src={image}
-									alt={data.name}
-									width={500}
-									height={500}
-								/>
+								<Image src={image} alt={data.name} width={500} height={500} />
 							) : null}
 						</div>
 					</div>
 					<div className="is-flex is-flex-direction-row-reverse">
-						<div className="buttons">{!editMode && editButton}</div>
+						<div className="buttons">
+							{!editMode && (
+								<IconButton
+									type="is-primary"
+									icon={faPencil}
+									onClick={() => setEditMode(true)}
+								>
+									Edit
+								</IconButton>
+							)}
+						</div>
 					</div>
 					{!editMode ? (
 						<WardrobeInfo item={data} />
 					) : (
 						<>
-							<EditForm initialValues={data} handleFormSubmit={handleFormSubmit}/>
+							<EditForm initialValues={data} handleFormSubmit={handleFormSubmit} />
 							<div className="is-flex buttons mt-4">
-								{deleteButton}
-								<button
-									className="button"
-									onClick={handleCancelButton}
+								<IconButton
+									type="is-danger"
+									icon={faTrash}
+									onClick={() => setDeleteModal(true)}
 								>
+									Delete
+								</IconButton>
+								<button className="button" onClick={() => setEditMode(false)}>
 									Cancel
 								</button>
 							</div>

@@ -1,14 +1,6 @@
-const { useState } = require("react");
-
-function Notification({ message, type }) {
-	const [show, setShow] = useState(false);
-
+function Notification({ message, type, show, setShow }) {
 	return (
-		<div
-			className={`notification ${type} ${
-				show ? "is-block" : "is-hidden"
-			}`}
-		>
+		<div className={`notification ${type} ${show ? "is-block" : "is-hidden"}`}>
 			<button className="delete" onClick={() => setShow(false)}></button>
 			{message}
 		</div>

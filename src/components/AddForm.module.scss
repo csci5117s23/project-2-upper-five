@@ -1,0 +1,10 @@
+.outline {
+	border: 1px solid #ccc;
+}
+
+.input {
+	&:active,
+	&:focus {
+		border-color: $info;
+	}
+}

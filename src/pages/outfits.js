@@ -5,9 +5,9 @@ import { useState } from "react";
 import Customize from "@/components/customize/Customize";
 import * as styles from "./outfits.module.scss";
 
-function OutfitsPage() {
+function OutfitsPage({ token }) {
 	const [displayOutfit, setDisplayOutfit] = useState(true);
-	const [typeList, setTypeList] = useState(["Top", "Bottom", "Shoes"]);
+	const [typeList, setTypeList] = useState(["Tops", "Bottoms", "Shoes"]);
 	return (
 		<>
 			<PageDetails
@@ -31,15 +31,10 @@ function OutfitsPage() {
 						</p>
 					</div>
 				</div>
-				
-				{displayOutfit && (
-					<ListCarousel typeList={typeList}></ListCarousel>
-				)}
+
+				{displayOutfit && <ListCarousel token={token} typeList={typeList}></ListCarousel>}
 				{!displayOutfit && (
-					<Customize
-						typeList={typeList}
-						setTypeList={setTypeList}
-					></Customize>
+					<Customize typeList={typeList} setTypeList={setTypeList}></Customize>
 				)}
 			</div>
 		</>

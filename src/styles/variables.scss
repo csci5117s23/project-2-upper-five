@@ -7,7 +7,7 @@ $sidenav-width: 15rem;
 
 // Colors:
 $primary: #c8f3ba;
-$info: #b9d4fb;
+$info: #8cb9f8;
 $highlight: #dee8d5;
 $accent: #da627d;
 
@@ -21,4 +21,11 @@ $accent: #da627d;
 
 .text-accent {
 	color: $accent !important;
+}
+
+.required {
+	&::after {
+		content: "*";
+		color: $accent;
+	}
 }

@@ -1,33 +1,41 @@
 import { React, useEffect, useState } from "react";
-import Camera from "./Camera";
-import Resizer from "react-image-file-resizer";
-import { cloudUpload } from "@/modules/cloudStorage";
-import { postFetcher } from "@/modules/fetcher";
-import { useAuth } from "@clerk/nextjs";
-import PhotoCrop from "./PhotoCrop";
 import { useRouter } from "next/router";
 
-function AddForm() {
+import { cloudUpload } from "@/modules/cloudStorage";
+import { postFetcher } from "@/modules/fetcher";
+import { cropPhoto } from "@/modules/imageManip";
+
+import Camera from "./Camera";
+import PhotoCrop from "./PhotoCrop";
+import PhotoFields from "./PhotoFields";
+
+import * as styles from "./AddForm.module.scss";
+import Loading from "./Loading";
+
+function AddForm({ token }) {
 	const router = useRouter();
 	const [stage, setStage] = useState(1);
-	const [cameraOpen, setcameraOpen] = useState(false);
+	const [cameraOpen, setCameraOpen] = useState(false);
 	const [photo, setPhoto] = useState(null);
 	const [croppedPhoto, setCroppedPhoto] = useState(null);
-	const { isLoaded, userId, sessionId, getToken } = useAuth();
-	const [token, setToken] = useState(null);
-	const [temp, setTemp] = useState(null);
-	
+	const [previewImage, setPreviewImage] = useState(null);
+	const [isUploading, setIsUploading] = useState(false);
+
+	// Sets the preview image
 	useEffect(() => {
-		async function process() {
-			const myToken = await getToken({ template: "codehooks" });
-			setToken(myToken);
+		if (croppedPhoto) {
+			let reader = new FileReader();
+			reader.onloadend = () => {
+				setPreviewImage(reader.result);
+			};
+			reader.readAsDataURL(croppedPhoto);
 		}
-		process();
-	}, [getToken]);
+	}, [croppedPhoto]);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 
+		setIsUploading(true);
 		const formData = new FormData(event.target);
 		const data = {};
 		for (let [key, value] of formData.entries()) {
@@ -48,104 +56,31 @@ function AddForm() {
 			]);
 
 			console.log("Response: " + JSON.stringify(response));
-			router.push("/wardrobe");
+			router.push("/wardrobe?success=true");
 		} catch (error) {
 			console.log("Error uploading image:", error);
 		}
 	};
 
 	const handleTakePhoto = async (photo) => {
-		const myPhoto = await setPhotoSize(photo);
+		const myPhoto = await cropPhoto(photo);
 		setPhoto(myPhoto);
-		setcameraOpen(false);
+		setCameraOpen(false);
 	};
 
 	const handleClearPhoto = () => {
 		setPhoto(null);
-		setcameraOpen(false);
+		setCameraOpen(false);
 	};
 
 	const handleUploadPhoto = async (event) => {
 		const photo = event.target.files[0];
-		const myPhoto = await setPhotoSize(photo);
+		const myPhoto = await cropPhoto(photo);
 		setPhoto(myPhoto);
 	};
 
-	async function setPhotoSize(photo) {
-		console.log("Set photo size");
-		try {
-			// Crop photo to be a square
-			// source used: https://www.geeksforgeeks.org/how-to-crop-an-image-using-canvas/
-			const croppedPhoto = await new Promise((resolve) => {
-				const reader = new FileReader();
-				reader.onload = () => {
-					const image = new Image();
-					image.onload = () => {
-						const canvas = document.createElement("canvas");
-						const ctx = canvas.getContext("2d");
-						const size = Math.min(image.width, image.height);
-						canvas.width = size;
-						canvas.height = size;
-						ctx.drawImage(
-							image,
-							(image.width - size) / 2,
-							(image.height - size) / 2,
-							size,
-							size,
-							0,
-							0,
-							size,
-							size
-						);
-
-						canvas.toBlob((blob) => {
-							const file = new File([blob], photo.name, {
-								type: "image/jpeg",
-							});
-							resolve(file);
-						});
-					};
-					image.src = reader.result;
-				};
-				reader.readAsDataURL(photo);
-			});
-
-			// Resize photo to be 500x500
-			const resized = await new Promise((resolve) => {
-				Resizer.imageFileResizer(
-					croppedPhoto,
-					750,
-					750,
-					"JPEG",
-					100,
-					0,
-					(uri) => {
-						resolve(uri);
-					},
-					"file",
-					200,
-					200
-				);
-			});
-			return resized;
-		} catch (error) {
-			console.log("Error resizing image:", error);
-			return null;
-		}
-	}
-
-	useEffect(() => {
-		if (croppedPhoto) {
-			let reader = new FileReader();
-			reader.onloadend = () => {
-				setTemp(reader.result);
-			};
-			reader.readAsDataURL(croppedPhoto);
-		}
-	}, [croppedPhoto]);
-
 	if (stage === 2 && !croppedPhoto) {
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 
 	return (
@@ -154,7 +89,7 @@ function AddForm() {
 				{stage === 1 && (
 					<div>
 						<div className="field">
-							<label className="label">Photo:</label>
+							<label className="label is-size-4">Step 1: Add a Photo</label>
 							{photo ? (
 								<PhotoCrop
 									photo={photo}
@@ -168,43 +103,11 @@ function AddForm() {
 									{cameraOpen ? (
 										<Camera onCapture={handleTakePhoto} />
 									) : (
-										<div className="field">
-											<div className="file is-info has-name">
-												<label className="file-label">
-													<input
-														className="file-input"
-														type="file"
-														name="photo"
-														onChange={
-															handleUploadPhoto
-														}
-														required
-													/>
-													<span className="file-cta">
-														<span className="file-icon">
-															<i className="fas fa-upload"></i>
-														</span>
-														<span className="file-label">
-															Upload Photo
-														</span>
-													</span>
-													<span className="file-name">
-														{photo
-															? photo.name
-															: "No file selected"}
-													</span>
-												</label>
-											</div>
-											<button
-												className="button is-warning"
-												type="button"
-												onClick={() =>
-													setcameraOpen(true)
-												}
-											>
-												Open Camera
-											</button>
-										</div>
+										<PhotoFields
+											handleUploadPhoto={handleUploadPhoto}
+											photo={photo}
+											setCameraOpen={setCameraOpen}
+										/>
 									)}
 								</div>
 							)}
@@ -213,20 +116,22 @@ function AddForm() {
 				)}
 				{stage === 2 && (
 					<div>
+						<label className="label is-size-4">Step 2: Add Information</label>
 						<div className="field">
-							<label className="label">Item Name</label>
+							<label className="label required">Item Name</label>
 							<div className="control">
 								<input
 									className="input"
 									name="name"
 									type="text"
 									placeholder=""
+									maxLength={100}
 									required
 								></input>
 							</div>
 						</div>
 						<div className="field">
-							<label className="label">Type</label>
+							<label className="label required">Type</label>
 							<div className="control">
 								<div className="select">
 									<select name="type" required>
@@ -241,7 +146,7 @@ function AddForm() {
 							</div>
 						</div>
 						<div className="field">
-							<label className="label">Occasion</label>
+							<label className="label required">Occasion</label>
 							<div className="control">
 								<div className="select">
 									<select name="occasion" required>
@@ -254,13 +159,14 @@ function AddForm() {
 							</div>
 						</div>
 						<div className="field">
-							<label className="label">Own</label>
+							<label className="label required">Do You Own This?</label>
 							<div className="control">
-								<label className="radio">
+								<label className="radio mr-4">
 									<input
 										type="radio"
 										name="own"
 										value="true"
+										className="mr-1"
 										required
 									></input>
 									Yes
@@ -270,6 +176,7 @@ function AddForm() {
 										type="radio"
 										name="own"
 										value="false"
+										className="mr-1"
 										required
 									></input>
 									No
@@ -279,26 +186,31 @@ function AddForm() {
 						<div className="field">
 							<div className="control">
 								<button
-									className="button"
+									className="button mr-4"
 									type="button"
 									onClick={() => setStage(1)}
 								>
 									Back
 								</button>
 								<button
-									className="button is-primary"
+									className={`button is-primary ${
+										isUploading ? "is-loading" : ""
+									}`}
 									type="submit"
 								>
 									Submit
 								</button>
 							</div>
 						</div>
-						{temp && (
+						{previewImage && (
 							<div>
-								<p className="has-text-weight-bold">
-									Image Preview:
-								</p>
-								<img src={temp} width={500} height={500} />
+								<p className="has-text-weight-bold">Image Preview:</p>
+								<img
+									src={previewImage}
+									width={500}
+									height={500}
+									className={styles.outline}
+								/>
 							</div>
 						)}
 					</div>

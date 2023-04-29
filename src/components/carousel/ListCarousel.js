@@ -39,9 +39,7 @@ export default function ListCarousel({ typeList }) {
 		let outfitName = document.getElementById("outfitName").value;
 		newTypeList.forEach((type) => {
 			if (indices[type] === undefined) {
-				const element_id = document.getElementById(
-					`init-${type}`
-				).innerHTML;
+				const element_id = document.getElementById(`init-${type}`).innerHTML;
 				const img_id = element_id.split("-")[1];
 				items.push(img_id);
 				typeOrder.push(type);
@@ -75,12 +73,13 @@ export default function ListCarousel({ typeList }) {
 		<>
 			<form onSubmit={saveOutfit}>
 				<div className="field">
-					<label className="label">Outfit Name</label>
+					<label className="label required">Outfit Name</label>
 					<div className="control">
 						<input
 							className="input"
 							type="text"
 							id="outfitName"
+							maxLength={100}
 							required
 						></input>
 					</div>
@@ -95,9 +94,7 @@ export default function ListCarousel({ typeList }) {
 					);
 				})}
 				<div className={`field`}>
-					<p
-						className={`control ${styles.containerButton} ${styles.space}`}
-					>
+					<p className={`control ${styles.containerButton} ${styles.space}`}>
 						<button type="submit" className="button is-success">
 							Finish
 						</button>

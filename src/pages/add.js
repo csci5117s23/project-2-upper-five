@@ -2,7 +2,7 @@ import AddForm from "@/components/AddForm";
 import PageDetails from "@/components/PageDetails";
 import withAuth from "@/components/hoc/withAuth";
 
-function AddPage() {
+function AddPage({ token }) {
 	return (
 		<>
 			<PageDetails
@@ -11,7 +11,7 @@ function AddPage() {
 			/>
 			<div className="section pt-4">
 				<h1 className="title is-1">Add Items to your Closet</h1>
-				<AddForm></AddForm>
+				<AddForm token={token}></AddForm>
 			</div>
 		</>
 	);

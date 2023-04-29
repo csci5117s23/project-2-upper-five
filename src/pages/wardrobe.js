@@ -1,65 +1,56 @@
+import Notification from "@/components/Notification";
 import PageDetails from "@/components/PageDetails";
 import withAuth from "@/components/hoc/withAuth";
 import WardrobeCard from "@/components/wardrobe/WardrobeCard";
-import { useState } from "react";
+import clothingCategoryData from "@/data/clothingCategories";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 function WardrobePage() {
-	const tabs = [
-		"All",
-		"Hats",
-		"Accessories",
-		"Tops",
-		"Bottoms",
-		"Dresses",
-		"Shoes",
-	];
+	const router = useRouter();
 	const [selectedCategory, setSelectedCategory] = useState("All");
+	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+	const [showDeletedMessage, setShowDeletedMessage] = useState(false);
+	const [deletedItem, setDeletedItem] = useState("");
+	const [clothingCategories, setClothingCategories] = useState([]);
+
 	let dataUrl = `${process.env.NEXT_PUBLIC_API_URL}/items`;
 	if (selectedCategory !== "All") {
 		dataUrl = `${dataUrl}?type=${selectedCategory}`;
 	}
-
 	const { data, error } = useSWR(dataUrl);
 
-	const testItems = [
-		{
-			_id: "12345-67890",
-			name: "My Red Shirt",
-			type: "shirt",
-			occasion: "casual",
-			own: true,
-			downloadUrl:
-				"https://f005.backblazeb2.com/file/clothing-tracker/500.png",
-		},
-		{
-			_id: "23456-78901",
-			name: "My Red Pants",
-			type: "pants",
-			occasion: "casual",
-			own: true,
-			downloadUrl:
-				"https://f005.backblazeb2.com/file/clothing-tracker/500.png",
-		},
-		{
-			_id: "34567-89012",
-			name: "My Red Shoes",
-			type: "shoes",
-			occasion: "casual",
-			own: true,
-			downloadUrl:
-				"https://f005.backblazeb2.com/file/clothing-tracker/500.png",
-		},
-		{
-			_id: "45678-90123",
-			name: "My Red Hat",
-			type: "hat",
-			occasion: "casual",
-			own: true,
-			downloadUrl:
-				"https://f005.backblazeb2.com/file/clothing-tracker/500.png",
-		},
-	];
+	useEffect(() => {
+		async function process() {
+			if (router.query.success) {
+				setShowSuccessMessage(true);
+				await new Promise((resolve) => setTimeout(resolve, 9000));
+				setShowSuccessMessage(false);
+				router.push("/wardrobe");
+			} else if (router.query.deleted) {
+				setShowDeletedMessage(true);
+				setDeletedItem(router.query.name);
+				await new Promise((resolve) => setTimeout(resolve, 9000));
+				setShowDeletedMessage(false);
+				setDeletedItem("");
+				router.push("/wardrobe");
+			}
+		}
+
+		process();
+	}, [router]);
+
+	useEffect(() => {
+		function process() {
+			let temp = ["All"];
+			temp = temp.concat(clothingCategoryData.categories);
+			setClothingCategories(temp);
+		}
+
+		process();
+	}, []);
 
 	return (
 		<>
@@ -69,26 +60,37 @@ function WardrobePage() {
 			/>
 			<div className="tabs">
 				<ul>
-					{tabs.map((tab) => (
-						<li
-							key={tab}
-							className={
-								tab === selectedCategory ? "is-active" : ""
-							}
-						>
-							<a onClick={() => setSelectedCategory(tab)}>
-								{tab}
-							</a>
+					{clothingCategories.map((tab) => (
+						<li key={tab} className={tab === selectedCategory ? "is-active" : ""}>
+							<a onClick={() => setSelectedCategory(tab)}>{tab}</a>
 						</li>
 					))}
 				</ul>
 			</div>
 			<section className="section">
+				<Notification
+					message="Item added successfully!"
+					type="is-success"
+					show={showSuccessMessage}
+					setShow={setShowSuccessMessage}
+				/>
+				<Notification
+					message={`You have just deleted ${deletedItem}, this action can not be undone.`}
+					type="is-warning"
+					show={showDeletedMessage}
+					setShow={setShowDeletedMessage}
+				/>
 				<div className="columns is-multiline is-mobile">
-					{data &&
-						data.map((item) => (
-							<WardrobeCard key={item._id} item={item} />
-						))}
+					{data && data.map((item) => <WardrobeCard key={item._id} item={item} />)}
+					{data && data.length === 0 && (
+						<div>
+							<p>Sorry you don't have any {selectedCategory} in your wardrobe.</p>
+							<p className="mt-4">You can add some here!</p>
+							<Link href="/add" className="button is-primary mt-2">
+								Add Item
+							</Link>
+						</div>
+					)}
 				</div>
 			</section>
 		</>
