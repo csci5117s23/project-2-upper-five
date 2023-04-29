@@ -26,12 +26,6 @@ export default function ImageCarousel({type,updateItem}){
         updateItem(type,image_id);
     }
 
-    useEffect(()=>{
-        if(data && data.length === 0){ // if there is no data in the category update the attibute to be false
-            updateItem(type,false);
-        }  
-    },[data])
-
     return (
         <>
             <h2 className={`title is-2 ${styles.heading}`}>{type}</h2>
@@ -50,7 +44,7 @@ export default function ImageCarousel({type,updateItem}){
                             })
                         }
                     </Carousel>
-                    { (data && data.length === 0) && <p className={styles.label}>No images in this category</p>}               
+                    { (data && data.length === 0) && <p id={`noData-${type}`} className={styles.label}>No images in this category</p>}               
                 </div>
             </div>
         </>

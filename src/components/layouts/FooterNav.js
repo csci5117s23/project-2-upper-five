@@ -26,12 +26,8 @@ function FooterNav() {
 	useEffect(() => {
 		var lastScrollTop = 0;
 		const handleScroll = () => {
-			let scrollTop =
-				window.pageYOffset || document.documentElement.scrollTop;
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
+			let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 5) {
 				setScrollDirection("up");
 			} else {
 				if (scrollTop > lastScrollTop) {
@@ -49,19 +45,11 @@ function FooterNav() {
 
 	return (
 		<footer
-			className={
-				styles.footer +
-				" " +
-				(scrollDirection === "up" ? styles.show : styles.hide)
-			}
+			className={styles.footer + " " + (scrollDirection === "up" ? styles.show : styles.hide)}
 		>
 			<div className={styles.footerContent}>
 				{navigation.tabs.map((tab) => (
-					<NavItem
-						key={tab.name}
-						{...tab}
-						active={activeTab.includes(tab.href)}
-					/>
+					<NavItem key={tab.name} {...tab} active={activeTab.includes(tab.href)} />
 				))}
 			</div>
 		</footer>

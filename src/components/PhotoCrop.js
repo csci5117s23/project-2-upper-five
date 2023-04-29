@@ -11,13 +11,7 @@ import {
 } from "@/modules/polygonEditor";
 import masks from "../data/crop-masks";
 
-function PhotoCrop({
-	photo,
-	handleClearPhoto,
-	setStage,
-	canvasSize,
-	setCroppedPhoto,
-}) {
+function PhotoCrop({ photo, handleClearPhoto, setStage, canvasSize, setCroppedPhoto }) {
 	const canvasRef = useRef(null);
 	const [canvas, setCanvas] = useState(null);
 	const [selectedPoints, setSelectedPoints] = useState(Object.keys(masks)[0]);
@@ -54,9 +48,7 @@ function PhotoCrop({
 
 	useEffect(() => {
 		if (selectedPoints.length > 0 && photoUrl && canvas) {
-			const container = document.querySelector(
-				`.${styles.canvasContainer}`
-			);
+			const container = document.querySelector(`.${styles.canvasContainer}`);
 
 			const containerWidth = container.clientWidth;
 			const scale = containerWidth / canvasSize;
@@ -110,51 +102,42 @@ function PhotoCrop({
 	async function handleNextButton() {
 		console.log("Going to the next stage");
 		setStage(2);
-		const croppedPhoto = await getCroppedPhoto(
-			photoUrl,
-			polygon,
-			imageScale
-		);
+		const croppedPhoto = await getCroppedPhoto(photoUrl, polygon, imageScale);
 		setCroppedPhoto(croppedPhoto);
 		console.log("Set cropped photo");
 	}
 
 	return (
 		<div className={styles.container}>
-			<div className="select mb-4">
-				<select
-					value={selectedPoints}
-					onChange={(e) => setSelectedPoints(e.target.value)}
-				>
-					{Object.keys(masks).map((mask) => (
-						<option key={mask} value={mask}>
-							{mask}
-						</option>
-					))}
-				</select>
+			<div className="is-flex">
+				<p className="has-text-weight-bold mr-2">Select Outline</p>
+				<div className="select mb-4">
+					<select
+						value={selectedPoints}
+						onChange={(e) => setSelectedPoints(e.target.value)}
+					>
+						{Object.keys(masks).map((mask) => (
+							<option key={mask} value={mask}>
+								{mask}
+							</option>
+						))}
+					</select>
+				</div>
 			</div>
 			<div className={styles.canvasContainer}>
-				<canvas
-					ref={canvasRef}
-					width={canvasSize}
-					height={canvasSize}
-				></canvas>
+				<canvas ref={canvasRef} width={canvasSize} height={canvasSize}></canvas>
 			</div>
-			<button
-				className="button is-danger mt-4"
-				type="button"
-				onClick={handleClearPhoto}
-			>
-				Clear Photo
-			</button>
-			<div className="field">
+			<div className="field mt-4">
 				<div className="control">
+					<button className="button is-danger" type="button" onClick={handleClearPhoto}>
+						Clear Photo
+					</button>
 					<button
-						className="button is-primary"
+						className="button is-primary ml-4"
 						type="button"
 						onClick={handleNextButton}
 					>
-						Next
+						Next Step
 					</button>
 				</div>
 			</div>

@@ -2,6 +2,7 @@ import useSWRImmutable from "swr/immutable";
 import { imageFetcher } from "../../modules/fetcher";
 import Image from "next/image";
 import Link from "next/link";
+import Loading from "../Loading";
 
 function WardrobeCard({ item }) {
 	const { data, error } = useSWRImmutable(item.downloadUrl, imageFetcher);
@@ -13,22 +14,16 @@ function WardrobeCard({ item }) {
 					<figure>
 						{data ? (
 							<Link href={`/wardrobe/${item._id}`}>
-								<Image
-									src={data}
-									alt={item.name}
-									width={500}
-									height={500}
-								/>
+								<Image src={data} alt={item.name} width={500} height={500} />
 							</Link>
-						) : null}
+						) : (
+							<Loading />
+						)}
 					</figure>
 				</div>
 				<div className="card-content">
 					<div className="content">
-						<Link
-							href={`/wardrobe/${item._id}`}
-							className="title is-3"
-						>
+						<Link href={`/wardrobe/${item._id}`} className="title is-3 text-primary">
 							{item.name}
 						</Link>
 					</div>

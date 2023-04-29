@@ -1,7 +1,23 @@
+// Imports
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&display=swap");
+
 // Override bulma variables here
+$primary: #e9fae3;
+$info: #8cb9f8;
+$success: #dee8d5;
+$warning: #da627d;
+$danger: #da627d;
+$link: #b95169;
+
+$input-focus-border-color: $info;
+
+$title-family: "Lilita One", serif;
 
 // Import Bulma
 @import "~bulma/bulma";
+@import "~bulma/bulma.sass";
+@import "~bulma/sass/form/input-textarea";
+@import "~bulma/sass/elements/title";
 
 .pageContainer {
 	position: relative;
