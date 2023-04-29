@@ -6,6 +6,8 @@ const apiFetcher = (url) =>
 		},
 	}).then((r) => r.json());
 
+// token fetcher will take in url and token 
+// Return json response after fetching
 const tokenFetcher = ([url, token]) => {
 	// console.log("Token Fetcher: " + url + " with: " + token);
 	return fetch(url, {
