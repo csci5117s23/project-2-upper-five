@@ -1,3 +1,5 @@
+import OccasionSelect from "@/components/OccasionSelect";
+import Loading from "@/components/Loading";
 import Notification from "@/components/Notification";
 import PageDetails from "@/components/PageDetails";
 import withAuth from "@/components/hoc/withAuth";
@@ -10,16 +12,27 @@ import useSWR from "swr";
 
 function WardrobePage() {
 	const router = useRouter();
+	const [clothingCategories, setClothingCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState("All");
+
+	const [occasions, setOccasions] = useState([]);
+	const [selectedOccasion, setSelectedOccasion] = useState("All");
+
 	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 	const [showDeletedMessage, setShowDeletedMessage] = useState(false);
 	const [deletedItem, setDeletedItem] = useState("");
-	const [clothingCategories, setClothingCategories] = useState([]);
 
 	let dataUrl = `${process.env.NEXT_PUBLIC_API_URL}/items`;
 	if (selectedCategory !== "All") {
 		dataUrl = `${dataUrl}?type=${selectedCategory}`;
+
+		if (selectedOccasion !== "All") {
+			dataUrl = `${dataUrl}&occasion=${selectedOccasion}`;
+		}
+	} else if (selectedOccasion !== "All") {
+		dataUrl = `${dataUrl}?occasion=${selectedOccasion}`;
 	}
+
 	const { data, error } = useSWR(dataUrl);
 
 	useEffect(() => {
@@ -28,14 +41,14 @@ function WardrobePage() {
 				setShowSuccessMessage(true);
 				await new Promise((resolve) => setTimeout(resolve, 9000));
 				setShowSuccessMessage(false);
-				router.push("/wardrobe");
+				// router.push("/wardrobe");
 			} else if (router.query.deleted) {
 				setShowDeletedMessage(true);
 				setDeletedItem(router.query.name);
 				await new Promise((resolve) => setTimeout(resolve, 9000));
 				setShowDeletedMessage(false);
 				setDeletedItem("");
-				router.push("/wardrobe");
+				// router.push("/wardrobe");
 			}
 		}
 
@@ -43,14 +56,16 @@ function WardrobePage() {
 	}, [router]);
 
 	useEffect(() => {
-		function process() {
-			let temp = ["All"];
-			temp = temp.concat(clothingCategoryData.categories);
-			setClothingCategories(temp);
-		}
+		let tempCategories = ["All"];
+		tempCategories = tempCategories.concat(clothingCategoryData.categories);
+		setClothingCategories(tempCategories);
 
-		process();
+		let tempOccasions = ["All"];
+		tempOccasions = tempOccasions.concat(clothingCategoryData.occasions);
+		setOccasions(tempOccasions);
 	}, []);
+
+	if (!data) return <Loading isPage={true} hasError={error} />;
 
 	return (
 		<>
@@ -67,7 +82,7 @@ function WardrobePage() {
 					))}
 				</ul>
 			</div>
-			<section className="section">
+			<section className="section pt-0">
 				<Notification
 					message="Item added successfully!"
 					type="is-success"
@@ -80,11 +95,19 @@ function WardrobePage() {
 					show={showDeletedMessage}
 					setShow={setShowDeletedMessage}
 				/>
+				<OccasionSelect
+					occasions={occasions}
+					selectedOccasion={selectedOccasion}
+					setSelectedOccasion={setSelectedOccasion}
+				/>
 				<div className="columns is-multiline is-mobile">
 					{data && data.map((item) => <WardrobeCard key={item._id} item={item} />)}
 					{data && data.length === 0 && (
 						<div>
-							<p>Sorry you don't have any {selectedCategory} in your wardrobe.</p>
+							<p>
+								Sorry you don't have any {selectedOccasion} {selectedCategory} in
+								your wardrobe.
+							</p>
 							<p className="mt-4">You can add some here!</p>
 							<Link href="/add" className="button is-primary mt-2">
 								Add Item

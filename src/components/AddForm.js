@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { cloudUpload } from "@/modules/cloudStorage";
 import { postFetcher } from "@/modules/fetcher";
 import { cropPhoto } from "@/modules/imageManip";
+import clothingCategories from "@/data/clothingCategories";
 
 import Camera from "./Camera";
 import PhotoCrop from "./PhotoCrop";
@@ -133,14 +134,11 @@ function AddForm({ token }) {
 						<div className="field">
 							<label className="label required">Type</label>
 							<div className="control">
-								<div className="select">
+								<div className="select is-fullwidth">
 									<select name="type" required>
-										<option>Hats</option>
-										<option>Accessories</option>
-										<option>Tops</option>
-										<option>Bottoms</option>
-										<option>Dresses</option>
-										<option>Shoes</option>
+										{clothingCategories.categories.map((category) => (
+											<option key={category}>{category}</option>
+										))}
 									</select>
 								</div>
 							</div>
@@ -148,12 +146,11 @@ function AddForm({ token }) {
 						<div className="field">
 							<label className="label required">Occasion</label>
 							<div className="control">
-								<div className="select">
+								<div className="select is-fullwidth">
 									<select name="occasion" required>
-										<option>Formal</option>
-										<option>Casual</option>
-										<option>Business Casual</option>
-										<option>Athletic</option>
+										{clothingCategories.occasions.map((occasion) => (
+											<option key={occasion}>{occasion}</option>
+										))}
 									</select>
 								</div>
 							</div>
