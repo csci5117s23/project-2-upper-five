@@ -1,27 +1,18 @@
 import { useState, useEffect } from "react";
 import ImageCarousel from "./ImageCarousel";
-import { useAuth } from "@clerk/nextjs";
 import { postFetcher } from "@/modules/fetcher";
 import { useRouter } from "next/router";
+
 import * as styles from "./ListCarousel.module.scss";
 
-export default function ListCarousel({ typeList }) {
-	const { getToken } = useAuth();
-	const [token, setToken] = useState(null);
+export default function ListCarousel({ typeList, token }) {
 	const router = useRouter();
-	var init_states = {};
+	var initStates = {};
 	typeList.forEach((type) => {
-		init_states[type] = undefined;
+		initStates[type] = undefined;
 	});
-	const [indices, setIndices] = useState(init_states);
-
-	useEffect(() => {
-		async function process() {
-			const myToken = await getToken({ template: "codehooks" });
-			setToken(myToken);
-		}
-		process();
-	}, [getToken]);
+	const [indices, setIndices] = useState(initStates);
+	const [loading, setLoading] = useState(false);
 
 	function updateItem(key, id) {
 		let indicesCopy = { ...indices };
@@ -31,6 +22,7 @@ export default function ListCarousel({ typeList }) {
 
 	async function saveOutfit(e) {
 		e.preventDefault();
+		setLoading(true);
 		// first remove outfits from type list that don't have data i.e. indices[type] === false
 		const newTypeList = typeList.filter((type) => indices[type] !== false);
 		// Lets build a POST request
@@ -40,7 +32,7 @@ export default function ListCarousel({ typeList }) {
 		newTypeList.forEach((type) => {
 			if (indices[type] === undefined) {
 				const element_id = document.getElementById(`init-${type}`).innerHTML;
-				const img_id = element_id.split("-")[1];
+				const img_id = element_id.split("init-")[1];
 				items.push(img_id);
 				typeOrder.push(type);
 			} else {
@@ -95,7 +87,10 @@ export default function ListCarousel({ typeList }) {
 				})}
 				<div className={`field`}>
 					<p className={`control ${styles.containerButton} ${styles.space}`}>
-						<button type="submit" className="button is-success">
+						<button
+							type="submit"
+							className={`button is-success ${loading ? "is-loading" : ""}`}
+						>
 							Finish
 						</button>
 					</p>
