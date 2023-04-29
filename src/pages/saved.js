@@ -44,12 +44,16 @@ function SavedPage() {
 			<div>
 			<div>
 				<Filter />
+				<br/>
 			</div>
 				<div>
 					{outfit ? (
-						outfit.map((item) => (
+						outfit.map((item, index) => 
+						<div key={index}>
 							<SavedItem item={item} />
-						))
+							<br/>
+						</div>
+						)
 					) : (
 						<div>No Data to Show</div>
 					)}
