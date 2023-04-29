@@ -16,7 +16,7 @@ function WardrobeUsedIn({ id }) {
 			<div className="columns is-mobile is-multiline">
 				{data.map((outfit) => (
 					<div key={outfit._id} className="column is-half-mobile is-one-third-tablet">
-						<OutfitCard outfit={outfit} />
+						<OutfitCard outfit={outfit} itemId={id} />
 					</div>
 				))}
 				{data.length > 0 ? null : (
