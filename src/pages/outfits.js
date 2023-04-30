@@ -3,39 +3,56 @@ import ListCarousel from "@/components/carousel/ListCarousel";
 import withAuth from "@/components/hoc/withAuth";
 import { useState } from "react";
 import Customize from "@/components/customize/Customize";
-import * as styles from "./outfits.module.scss";
 
-function OutfitsPage({ token }) {
+function OutfitsPage() {
 	const [displayOutfit, setDisplayOutfit] = useState(true);
-	const [typeList, setTypeList] = useState(["Tops", "Bottoms", "Shoes"]);
+	const [typeList,setTypeList ]= useState(["top", "bottom", "shoes"]);
 	return (
 		<>
 			<PageDetails
 				title="Clothing Tracker Create Outfit"
 				description="This is the homepage for our clothing tracker app."
 			/>
-			<div className={`section pt-4`}>
-				<div className={`${styles.container}`}>
-					<h1 className={`title is-1 ${styles.containerItem}`}>Create an Outfit</h1>
-					<div className={`field ${styles.containerItem}`}>
-						<p className="control">
-							<button
-								className={`button is-primary is-responsive"`}
-								onClick={function () {
-									setDisplayOutfit(!displayOutfit);
-									displayOutfit && setTypeList([]); //clear type list when clicking the button before rendering carousels
-								}}
-							>
-								Customize Outfit
-							</button>
-						</p>
-					</div>
+			<div className="section pt-4">
+				<h1 className="title is-1">Outfits Page</h1>
+				<div className="field">
+					<p className="control">
+						{/* <button className="button is-success" onClick={ 
+							function() {
+								setDisplayOutfit(!displayOutfit)
+								displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
+							}
+						}>
+							Customize Outfit
+						</button> */}
+					</p>
 				</div>
-
-				{displayOutfit && <ListCarousel token={token} typeList={typeList}></ListCarousel>}
-				{!displayOutfit && (
-					<Customize typeList={typeList} setTypeList={setTypeList}></Customize>
-				)}
+				{ displayOutfit && 
+									<>
+										<button className="button is-success" onClick={ 
+												function() {
+													setDisplayOutfit(!displayOutfit)
+													displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
+												}
+											}>
+												Customize Outfit
+										</button>
+										<ListCarousel typeList={typeList}></ListCarousel>
+									</>
+				}
+				{ !displayOutfit && 
+									<>
+										<Customize typeList={typeList} setTypeList={setTypeList} />
+										<button className="button is-success is-light" onClick={ 
+											function() {
+												setDisplayOutfit(!displayOutfit)
+												displayOutfit && setTypeList([]) //clear type list when clicking the button before rendering carousels
+											}
+										}>
+											Show Outfit
+										</button>
+									</>
+				}
 			</div>
 		</>
 	);
