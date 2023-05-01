@@ -1,11 +1,15 @@
 import Webcam from "react-webcam";
 import { React, useRef, useState } from "react";
 import Loading from "./Loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faCameraRotate } from "@fortawesome/free-solid-svg-icons";
+
+import * as styles from "./Camera.module.scss";
 
 export default function Camera({ onCapture }) {
 	const webcamRef = useRef(null);
 	const [webcamLoaded, setWebcamLoaded] = useState(false);
-	const [useEnvironmentCamera, setUseEnvironmentCamera] = useState(false);
+	const [useEnvironmentCamera, setUseEnvironmentCamera] = useState(true);
 
 	const handleTakePhoto = () => {
 		//convert the base64 image to a blob: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
@@ -27,38 +31,35 @@ export default function Camera({ onCapture }) {
 	const videoConstraints = useEnvironmentCamera
 		? {
 				facingMode: "environment",
+                aspectRatio: 1
 		  }
 		: {
 				facingMode: "user",
+                aspectRatio: 1
 		  };
 
 	return (
-		<div>
-			<div>
-				{!webcamLoaded && <Loading />}
-				<Webcam
-					audio={false}
-					ref={webcamRef}
-					screenshotFormat="image/jpeg"
-					videoConstraints={videoConstraints}
-					onUserMedia={() => setWebcamLoaded(true)}
-				/>
-			</div>
-			<div className="field">
+		<div className={styles.camera}>
+            {!webcamLoaded && <Loading />}
+            <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                onUserMedia={() => setWebcamLoaded(true)}
+            />
+			<div className={`${styles.buttonGroup} field is-grouped`}>
 				<div className="control">
-					<button className="button is-info" type="button" onClick={handleTakePhoto}>
-						Take Photo
+					<button className={`${styles.flip} button is-primary is-large`} type="button" onClick={handleTakePhoto}>
+                        <FontAwesomeIcon icon={faCamera} />
 					</button>
 				</div>
-			</div>
-			<div className="field">
 				<div className="control">
 					<button
-						className="button is-link"
+						className={`${styles.flip} button is-link`}
 						type="button"
-						onClick={() => setUseEnvironmentCamera(!useEnvironmentCamera)}
-					>
-						Switch Camera
+						onClick={() => setUseEnvironmentCamera(!useEnvironmentCamera)}>
+						<FontAwesomeIcon icon={faCameraRotate} />
 					</button>
 				</div>
 			</div>
