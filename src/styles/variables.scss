@@ -1,2 +1,47 @@
+@import "~bulma/sass/utilities/mixins";
+
 $footer-height: 3.5rem;
-$footer-background-color: 240 240 240;
+$temp: rgb(22, 114, 132);
+$footer-background-color: 22 114 132;
+$sidenav-width: 15rem;
+
+// Colors:
+$primary: #aced97;
+$info: #8cb9f8;
+$highlight: #dee8d5;
+$accent: #da627d;
+
+$loading: #da627d;
+$loading-25: #aa4b6056;
+$loading-25-opaque: #81384800;
+
+.text-primary {
+	color: #6a788a !important;
+}
+
+.text-highlight {
+	color: $highlight !important;
+}
+
+.text-accent {
+	color: $accent !important;
+}
+
+.required {
+	&::after {
+		content: "*";
+		color: $accent;
+	}
+}
+
+.control-prev {
+	&::before {
+		border-right-color: #000 !important;
+	}
+}
+
+.control-next {
+	&::before {
+		border-left-color: #000 !important;
+	}
+}

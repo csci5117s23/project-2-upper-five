@@ -1,0 +1,14 @@
+.menu {
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: $sidenav-width;
+	padding: 1em;
+	bottom: 0;
+	border-right: 1px solid #acacac;
+
+	@include touch {
+		display: none;
+	}
+}

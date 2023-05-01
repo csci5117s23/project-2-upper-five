@@ -1,9 +1,11 @@
 .footer {
-	position: absolute;
+	display: none;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
 	height: $footer-height;
 	background-color: rgb($footer-background-color);
+	transition: all 0.25s ease-in-out;
 
 	.footerContent {
 		display: flex;
@@ -11,5 +13,17 @@
 		align-items: center;
 		height: 100%;
 		padding: 0 1rem;
+	}
+
+	&.hide {
+		bottom: -$footer-height;
+	}
+
+	&.show {
+		bottom: 0;
+	}
+
+	@include touch {
+		display: block;
 	}
 }

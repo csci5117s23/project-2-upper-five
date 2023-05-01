@@ -1,0 +1,37 @@
+// Loading style from: https://dev.to/gustavosfq/pulse-loading-with-css-2ofn
+.loadingComp {
+	position: relative;
+	width: 100px;
+	height: 100px;
+}
+
+.loadingWrapper {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate3d(-50%, -50%, 0);
+}
+
+.loading {
+	height: 50px;
+	width: 50px;
+	background-color: $loading;
+	border-radius: 50%;
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	40% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 20px $loading-25;
+	}
+
+	80% {
+		transform: scale(1);
+		box-shadow: 0 0 0 40px $loading-25-opaque;
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 $loading-25-opaque;
+	}
+}

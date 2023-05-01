@@ -1,7 +1,31 @@
+// Imports
+@import "~@fontsource/lilita-one/index.css";
+
 // Override bulma variables here
+$primary: #e9fae3;
+$primary-invert: findColorInvert($primary);
+$primary-light: #e9fae3;
+$primary-dark: #e9fae3;
+
+$info: #8cb9f8;
+$success: #dee8d5;
+$warning: #da627d;
+$danger: #da627d;
+$link: #b95169;
+
+$input-focus-border-color: $info;
+
+$title-family: "Lilita One", serif;
 
 // Import Bulma
 @import "~bulma/bulma";
+@import "~bulma/bulma.sass";
+@import "~bulma/sass/utilities/initial-variables";
+
+@import "~bulma/sass/elements/title";
+@import "~bulma/sass/elements/button";
+
+@import "~bulma/sass/form/input-textarea";
 
 .pageContainer {
 	position: relative;
@@ -9,5 +33,17 @@
 }
 
 .contentWrapper {
-	padding-bottom: $footer-height;
+	padding-left: $sidenav-width;
+	padding-bottom: 0;
+
+	@include touch {
+		padding-bottom: $footer-height;
+		padding-left: 0;
+	}
 }
+
+// #filter-button::after {
+// 	font-family: sans-serif;
+// 	content: "▼";
+// 	padding-left: 0.5em;
+// }

@@ -5,7 +5,7 @@
 	flex-direction: column;
 	height: 100%;
 	padding: 0 1rem;
-	color: #000000;
+	color: #f7f7f7;
 	text-decoration: none;
 	font-size: 1.5rem;
 	cursor: pointer;
@@ -13,11 +13,15 @@
 	overflow: hidden;
 
 	&:hover {
-		color: #01bf71;
+		color: $primary;
 		transition: all 0.2s ease-in-out;
 	}
 
 	span {
 		font-size: 0.8rem;
+	}
+
+	&[data-is-active="true"] {
+		color: $primary;
 	}
 }

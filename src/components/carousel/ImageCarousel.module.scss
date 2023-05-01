@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.containerItem {
+    width: 50%;
+    align-items: center;
+    margin: auto;
+}
+
+.heading {
+    margin:3rem;
+}
+
+.label {
+    font-style: italic;
+    font-size: small;
+}
+
+.hide {
+    display: none;
+}
+
+.space {
+    margin: 3rem;
+}
